@@ -1,0 +1,209 @@
+-- phpMyAdmin SQL Dump
+-- version 4.5.1
+-- http://www.phpmyadmin.net
+--
+-- Client :  127.0.0.1
+-- Généré le :  Mer 01 Octobre 2025 à 13:07
+-- Version du serveur :  10.1.16-MariaDB
+-- Version de PHP :  7.0.9
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- Base de données :  `tech`
+--
+
+--
+-- Contenu de la table `annee_scolaire`
+--
+
+INSERT INTO `annee_scolaire` (`id`, `libelle_annee`, `statut`) VALUES
+(1, '2025 - 2026', 'actif');
+
+--
+-- Contenu de la table `appreciation`
+--
+
+INSERT INTO `appreciation` (`id`, `nom_appreciation_fr`, `nom_appreciation_en`, `cote`, `interv_ouvert`, `interv_fermet`) VALUES
+(1, 'CNA', 'CNA', 'D', 0, 10),
+(2, 'CMA', 'CAA', 'C', 10, 12),
+(3, 'CA', 'CA', 'C+', 12, 14),
+(4, 'CBA', 'CWA', 'B', 14, 15),
+(5, 'CBA', 'CWA', 'B+', 15, 16),
+(6, 'CTBA', 'CVWA', 'A', 16, 18),
+(7, 'CTBA', 'CVWA', 'A+', 18, 20);
+
+--
+-- Contenu de la table `departement`
+--
+
+INSERT INTO `departement` (`id`, `nom_court_fr`, `nom_court_en`, `libelle_departement_fr`, `libelle_departement_en`, `id_region`) VALUES
+(1, 'DJEREM', 'DJEREM', 'DELEGATION DEPARTEMENTALE DU DJEREM', 'DJEREM DIVISIONAL DELEGATION', 1),
+(2, 'FARO-ET-DEO', 'FARO-AND-DEO', 'DELEGATION DEPARTEMENTALE DU FARO-ET-DEO', 'FARO-AND-DEO DIVISIONAL DELEGATION', 1),
+(3, 'MAYO-BANYO', 'MAYO-BANYO', 'DELEGATION DEPARTEMENTALE DU MAYO-BANYO', 'MAYO-BANYO DIVISIONAL DELEGATION', 1),
+(4, 'MBERE', 'MBERE', 'DELEGATION DEPARTEMENTALE DE LA MBERE', 'MBERE DIVISIONAL DELEGATION', 1),
+(5, 'VINA', 'VINA', 'DELEGATION DEPARTEMENTALE DE LA VINA', 'VINA DIVISIONAL DELEGATION', 1),
+(6, 'HAUTE-SANAGA', 'HAUTE-SANAGA', 'DELEGATION DEPARTEMENTALE DE LA HAUTE-SANAGA', 'HAUTE-SANAGA DIVISIONAL DELEGATION', 2),
+(7, 'LEKIE', 'LEKIE', 'DELEGATION DEPARTEMENTALE DE LA LEKIE', 'LEKIE DIVISIONAL DELEGATION', 2),
+(8, 'MBAM-ET-INOUBOU', 'MBAM-AND-INOUBOU', 'DELEGATION DEPARTEMENTALE DU MBAM-ET-INOUBOU', 'MBAM-AND-INOUBOU DIVISIONAL DELEGATION', 2),
+(9, 'MBAM-ET-KIM', 'MBAM-AND-KIM', 'DELEGATION DEPARTEMENTALE DU MBAM-ET-KIM', 'MBAM-AND-KIM DIVISIONAL DELEGATION', 2),
+(10, 'MEFOU-ET-AFAMBA', 'MEFOU-AND-AFAMBA', 'DELEGATION DEPARTEMENTALE DE LA MEFOU-ET-AFAMBA', 'MEFOU-AND-AFAMBA DIVISIONAL DELEGATION', 2),
+(11, 'MEFOU-ET-AKONO', 'MEFOU-AND-AKONO', 'DELEGATION DEPARTEMENTALE DE LA MEFOU-ET-AKONO', 'MEFOU-AND-AKONO DIVISIONAL DELEGATION', 2),
+(12, 'MFOUNDI', 'MFOUNDI', 'DELEGATION DEPARTEMENTALE DU MFOUNDI', 'MFOUNDI DIVISIONAL DELEGATION', 2),
+(13, 'NYONG-ET-KELLE', 'NYONG-ET-KELLE', 'DELEGATION DEPARTEMENTALE DU NYONG-ET-KELLE', 'NYONG-ET-KELLE DIVISIONAL DELEGATION', 2),
+(14, 'NYONG-ET-MFOUMOU', 'NYONG-ET-MFOUMOU', 'DELEGATION DEPARTEMENTALE DU NYONG-ET-MFOUMOU', 'NYONG-ET-MFOUMOU DIVISIONAL DELEGATION', 2),
+(15, 'NYONG-ET-SO''O', 'NYONG-ET-SO''O', 'DELEGATION DEPARTEMENTALE DU NYONG-ET-SO''O', 'NYONG-ET-SO''O DIVISIONAL DELEGATION', 2),
+(16, 'BOUMBA-ET-NGOKO', 'BOUMBA-AND-NGOKO', 'DELEGATION DEPARTEMENTALE DE LA BOUMBA-ET-NGOKO', 'BOUMBA-AND-NGOKO DIVISIONAL DELEGATION', 3),
+(17, 'HAUT-NYONG', 'HAUT-NYONG', 'DELEGATION DEPARTEMENTALE DU HAUT-NYONG', 'HAUT-NYONG DIVISIONAL DELEGATION', 3),
+(18, 'KADEY', 'KADEY', 'DELEGATION DEPARTEMENTALE DE LA KADEY', 'KADEY DIVISIONAL DELEGATION', 3),
+(19, 'LOM-ET-DJEREM', 'LOM-AND-DJEREM', 'DELEGATION DEPARTEMENTALE DU LOM-ET-DJEREM', 'LOM-AND-DJEREM DIVISIONAL DELEGATION', 3),
+(20, 'DIAMARE', 'DIAMARE', 'DELEGATION DEPARTEMENTALE DU DIAMARE', 'DIAMARE DIVISIONAL DELEGATION', 4),
+(21, 'LOGONE-ET-CHARI', 'LOGONE-AND-CHARI', 'DELEGATION DEPARTEMENTALE DU LOGONE-ET-CHARI', 'LOGONE-AND-CHARI DIVISIONAL DELEGATION', 4),
+(22, 'MAYO-DANAY', 'MAYO-DANAY', 'DELEGATION DEPARTEMENTALE DU MAYO-DANAY', 'MAYO-DANAY DIVISIONAL DELEGATION', 4),
+(23, 'MAYO-KANI', 'MAYO-KANI', 'DELEGATION DEPARTEMENTALE DU MAYO-KANI', 'MAYO-KANI DIVISIONAL DELEGATION', 4),
+(24, 'MAYO-SAVA', 'MAYO-SAVA', 'DELEGATION DEPARTEMENTALE DU MAYO-SAVA', 'MAYO-SAVA DIVISIONAL DELEGATION', 4),
+(25, 'MAYO-TSANAGA', 'MAYO-TSANAGA', 'DELEGATION DEPARTEMENTALE DU MAYO-TSANAGA', 'MAYO-TSANAGA DIVISIONAL DELEGATION', 4),
+(26, 'MOUNGO', 'MOUNGO', 'DELEGATION DEPARTEMENTALE DU MOUNGO', 'MOUNGO DIVISIONAL DELEGATION', 5),
+(27, 'NKAM', 'NKAM', 'DELEGATION DEPARTEMENTALE DU NKAM', 'NKAM DIVISIONAL DELEGATION', 5),
+(28, 'SANAGA-MARITIME', 'SANAGA-MARITIME', 'DELEGATION DEPARTEMENTALE DE LA SANAGA-MARITIME', 'SANAGA-MARITIME DIVISIONAL DELEGATION', 5),
+(29, 'WOURI', 'WOURI', 'DELEGATION DEPARTEMENTALE DU WOURI', 'WOURI DIVISIONAL DELEGATION', 5),
+(30, 'BENOUE', 'BENOUE', 'DELEGATION DEPARTEMENTALE DE LA BENOUE', 'BENOUE DIVISIONAL DELEGATION', 6),
+(31, 'FARO', 'FARO', 'DELEGATION DEPARTEMENTALE DU FARO', 'FARO DIVISIONAL DELEGATION', 6),
+(32, 'MAYO-LOUTI', 'MAYO-LOUTI', 'DELEGATION DEPARTEMENTALE DU MAYO-LOUTI', 'MAYO-LOUTI DIVISIONAL DELEGATION', 6),
+(33, 'MAYO-REY', 'MAYO-REY', 'DELEGATION DEPARTEMENTALE DU MAYO-REY', 'MAYO-REY DIVISIONAL DELEGATION', 6),
+(34, 'BOYO', 'BOYO', 'DELEGATION DEPARTEMENTALE DE LA BOYO', 'BOYO DIVISIONAL DELEGATION', 7),
+(35, 'BUI', 'BUI', 'DELEGATION DEPARTEMENTALE DU BUI', 'BUI DIVISIONAL DELEGATION', 7),
+(36, 'DONGA-MANTUNG', 'DONGA-MANTUNG', 'DELEGATION DEPARTEMENTALE DU DONGA-MANTUNG', 'DONGA-MANTUNG DIVISIONAL DELEGATION', 7),
+(37, 'MENCHUM', 'MENCHUM', 'DELEGATION DEPARTEMENTALE DE LA MENCHUM', 'MENCHUM DIVISIONAL DELEGATION', 7),
+(38, 'MEZAM', 'MEZAM', 'DELEGATION DEPARTEMENTALE DE LA MEZAM', 'MEZAM DIVISIONAL DELEGATION', 7),
+(39, 'MOMO', 'MOMO', 'DELEGATION DEPARTEMENTALE DE LA MOMO', 'MOMO DIVISIONAL DELEGATION', 7),
+(40, 'NGO-KETUNJIA', 'NGO-KETUNJIA', 'DELEGATION DEPARTEMENTALE DU NGO-KETUNJIA', 'NGO-KETUNJIA DIVISIONAL DELEGATION', 7),
+(41, 'BAMBOUTOS', 'BAMBOUTOS', 'DELEGATION DEPARTEMENTALE DES BAMBOUTOS', 'BAMBOUTOS DIVISIONAL DELEGATION', 8),
+(42, 'HAUT-NKAM', 'HAUT-NKAM', 'DELEGATION DEPARTEMENTALE DU HAUT-NKAM', 'HAUT-NKAM DIVISIONAL DELEGATION', 8),
+(43, 'HAUTS-PLATEAUX', 'HAUTS-PLATEAUX', 'DELEGATION DEPARTEMENTALE DES HAUTS-PLATEAUX', 'HAUTS-PLATEAUX DIVISIONAL DELEGATION', 8),
+(44, 'KOUNG-KHI', 'KOUNG-KHI', 'DELEGATION DEPARTEMENTALE DU KOUNG-KHI', 'KOUNG-KHI DIVISIONAL DELEGATION', 8),
+(45, 'MENOUA', 'MENOUA', 'DELEGATION DEPARTEMENTALE DE LA MENOUA', 'MENOUA DIVISIONAL DELEGATION', 8),
+(46, 'MIFI', 'MIFI', 'DELEGATION DEPARTEMENTALE DE LA MIFI', 'MIFI DIVISIONAL DELEGATION', 8),
+(47, 'NDE', 'NDE', 'DELEGATION DEPARTEMENTALE DU NDE', 'NDE DIVISIONAL DELEGATION', 8),
+(48, 'NOUN', 'NOUN', 'DELEGATION DEPARTEMENTALE DU NOUN', 'NOUN DIVISIONAL DELEGATION', 8),
+(49, 'DJA-ET-LOBO', 'DJA-AND-LOBO', 'DELEGATION DEPARTEMENTALE DU DJA-ET-LOBO', 'DJA-AND-LOBO DIVISIONAL DELEGATION', 9),
+(50, 'MVILA', 'MVILA', 'DELEGATION DEPARTEMENTALE DE LA MVILA', 'MVILA DIVISIONAL DELEGATION', 9),
+(51, 'OCEAN', 'OCEAN', 'DELEGATION DEPARTEMENTALE L''OCEAN', 'OCEAN DIVISIONAL DELEGATION', 9),
+(52, 'VALLEE-DU-NTEM', 'VALLEE-OF-NTEM', 'DELEGATION DEPARTEMENTALE DE LA VALLEE-DU-NTEM', 'VALLEE-OF-NTEM DIVISIONAL DELEGATION', 9),
+(53, 'FAKO', 'FAKO', 'DELEGATION DEPARTEMENTALE DU FAKO', 'FAKO DIVISIONAL DELEGATION', 10),
+(54, 'KOUPE-MANENGOUBA', 'KOUPE-MANENGOUBA', 'DELEGATION DEPARTEMENTALE DU KOUPE-MANENGOUBA', 'KOUPE-MANENGOUBA DIVISIONAL DELEGATION', 10),
+(55, 'LEBIALEM', 'LEBIALEM', 'DELEGATION DEPARTEMENTALE DU LEBIALEM', 'LEBIALEM DIVISIONAL DELEGATION', 10),
+(56, 'MANYU', 'MANYU', 'DELEGATION DEPARTEMENTALE DE LA MANYU', 'MANYU DIVISIONAL DELEGATION', 10),
+(57, 'MEME', 'MEME', 'DELEGATION DEPARTEMENTALE DE LA MEME', 'MEME DIVISIONAL DELEGATION', 10),
+(58, 'NDIAN', 'NDIAN', 'DELEGATION DEPARTEMENTALE DU NDIAN', 'NDIAN DIVISIONAL DELEGATION', 10);
+
+--
+-- Contenu de la table `enseignant`
+--
+
+INSERT INTO `enseignant` (`id`, `nom`, `sexe`, `poste`, `login`, `mdp`, `etat`, `image`) VALUES
+(1, 'Cellule Informatique', 'M', 2, 'cell', '5f435eb30281de82a41717382717b0626fdd64bc', 'actif', NULL),
+(2, 'Administrateur Principal', 'M', 1, 'admin', 'd033e22ae348aeb5660fc2140aec35850c4da997', 'actif', NULL),
+(3, 'ALONA Aime', 'M', 3, 'alona', 'df4138d3dc6e8e30bad1a65afa748d940a7c3ccc', 'actif', NULL);
+
+--
+-- Contenu de la table `groupe`
+--
+
+INSERT INTO `groupe` (`id`, `nom_groupe`, `code_groupe`) VALUES
+(1, 'Groupe 1', 'gp1'),
+(2, 'Groupe 2', 'gp2'),
+(3, 'Groupe 3', 'gp3'),
+(4, 'Groupe 4', 'gp4'),
+(5, 'Groupe 5', 'gp5');
+
+--
+-- Contenu de la table `information`
+--
+
+INSERT INTO `information` (`annee_scolaire`, `nom_pays_fr`, `nom_pays_en`, `nom_devise_fr`, `nom_devise_en`, `nom_ministere_fr`, `nom_ministere_en`, `region`, `departement`, `nom_etablissement_fr`, `nom_etablissement_en`, `type_ets`, `chef_ets`, `signataire_fr`, `signataire_en`, `arrondissement`, `ville`, `email`, `bp`, `sexe_signataire`, `contact`) VALUES
+('2025 - 2026', 'REPUBLIQUE DU CAMEROUN', 'REPUBLIC OF CAMEROON', 'Paix - Travail - Patrie', 'Peace - Work - Fatherland', 'ministere des enseignements secondaires', 'ministry of secondary education', 2, 8, 'complexe scolaire bilingue cywibra', 'bilingual school complex cywibra', 'lycee', 'Alona Aime', 'Le Proviseur', 'The Principal', 'bafia', 'biabetom', 'cywibra_complex@gmail.com', '0', 'M', '699602313');
+
+--
+-- Contenu de la table `journal_connexion`
+--
+
+INSERT INTO `journal_connexion` (`id`, `utilisateur`, `adresse_ip`, `periode_de_connexion`, `navigateur`, `os`) VALUES
+(1, 2, '::1', '2025-09-25 16:18:57', 'Chrome', 'Windows'),
+(2, 1, '::1', '2025-09-25 16:19:11', 'Chrome', 'Windows'),
+(3, 1, '127.0.0.1', '2025-09-25 17:22:30', 'Firefox', 'Windows'),
+(4, 1, '127.0.0.1', '2025-09-25 17:23:29', 'Firefox', 'Windows'),
+(5, 3, '127.0.0.1', '2025-09-25 17:24:08', 'Firefox', 'Windows'),
+(6, 1, '127.0.0.1', '2025-09-25 17:24:40', 'Firefox', 'Windows'),
+(7, 1, '127.0.0.1', '2025-09-29 12:03:45', 'Firefox', 'Windows'),
+(8, 1, '::1', '2025-10-01 13:01:21', 'Chrome', 'Windows');
+
+--
+-- Contenu de la table `niveau_classe`
+--
+
+INSERT INTO `niveau_classe` (`id`, `nom_niveau`, `code_niveau`) VALUES
+(1, '1annee', '1annee'),
+(2, '2annee', '2annee'),
+(3, '3annee', '3annee'),
+(4, '4annee', '4annee'),
+(5, '2nde', '2nde'),
+(6, '1ere', '1ere'),
+(7, 'tle', 'tle'),
+(8, 'form1', 'form1'),
+(9, 'form2', 'form2'),
+(10, 'form3', 'form3'),
+(11, 'form4', 'form4'),
+(12, 'form5', 'form5'),
+(13, 'lower6', 'lower6'),
+(14, 'upper6', 'upper6');
+
+--
+-- Contenu de la table `periode`
+--
+
+INSERT INTO `periode` (`id`, `nom_periode`, `date_ouvert`, `date_fermet`) VALUES
+(1, 'Sequence 1', NULL, NULL),
+(2, 'Sequence 2', NULL, NULL),
+(3, 'Sequence 3', NULL, NULL),
+(4, 'Sequence 4', NULL, NULL),
+(5, 'Sequence 5', NULL, NULL),
+(6, 'Sequence 6', NULL, NULL);
+
+--
+-- Contenu de la table `poste`
+--
+
+INSERT INTO `poste` (`id`, `code_poste`, `libelle_poste`) VALUES
+(1, 'admin', 'Administrateur'),
+(2, 'cell', 'Cellule Informatique'),
+(3, 'chef', 'Proviseur / Principal / Directeur'),
+(4, 'censeur', 'Censeur'),
+(5, 'sg', 'Surveillant General'),
+(6, 'eco', 'Econome / Intendant'),
+(7, 'prof', 'Enseignant');
+
+--
+-- Contenu de la table `region`
+--
+
+INSERT INTO `region` (`id`, `nom_court_fr`, `nom_court_en`, `libelle_region_fr`, `libelle_region_en`) VALUES
+(1, 'ADAMAOUA', 'ADAMAWA', 'DELEGATION Regionale de l''ADAMAOUA', 'ADAMAWA Regional Delegation'),
+(2, 'CENTRE', 'CENTER', 'DELEGATION Regionale du CENTRE', 'CENTER Regional Delegation'),
+(3, 'EST', 'EAST', 'DELEGATION Regionale de l''EST', 'EAST Regional Delegation'),
+(4, 'EXTREME-NORD', 'FAR NORTH', 'DELEGATION Regionale de l''EXTREME-NORD', 'FAR NORTH Regional DELEGATION'),
+(5, 'LITTORAL', 'LITTORAL', 'DELEGATION Regionale du LITTORAL', 'LITTORAL Regional Delegation'),
+(6, 'NORD', 'NORTH', 'DELEGATION Regionale du NORD', 'NORTH Regional Delegation'),
+(7, 'NORD-OUEST', 'NORD-WEST', 'DELEGATION Regionale du NORD-OUEST', 'NORTH-WEST Regional Delegation'),
+(8, 'OUEST', 'WEST', 'DELEGATION Regionale de l''OUEST', 'WEST Regional Delegation'),
+(9, 'SUD', 'SOUTH', 'DELEGATION Regionale du SUD', 'SOUTH Regional Delegation'),
+(10, 'SUD-OUEST', 'SOUTH-WEST', 'DELEGATION Regionale DU SUD-OUEST', 'SOUTH-WEST Regional Delegation');
+
+--
+-- Contenu de la table `section`
+--
+
+INSERT INTO `section` (`id`, `code_section`) VALUES
+(1, 'fr'),
+(2, 'en');
