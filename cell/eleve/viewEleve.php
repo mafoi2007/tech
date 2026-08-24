@@ -4,14 +4,13 @@
 	if(isset($_GET['id'])){
 		$eleve = (int) urldecode($_GET['id']);
 		$detail = $config->getEleve($eleve);
-		echo var_dump($detail);
 		if(empty($detail)){
 			echo "<h3 class='alert'>Votre requête n'a pas abouti.</h3>";
 		}else{ 
 			if(empty($detail['photo'])){
 				$photo = '../images/student/no_name.png';
 			}else{
-				$photo = $detail['photo'];
+				$photo = '../'.$detail['photo'];
 			}
 			?>
 			<form method='post' action='../traitement.php' targer='_blank'>
@@ -24,7 +23,7 @@
 						<th>Matricule National : </th>
 						<th><font class='bien'><?php echo $detail['rne']; ?></font></th>
 						<th>Photo de l'élève : </th>
-						<th><img src='<?php echo $photo; ?>' /></th>
+						<th><img src='<?php echo $photo; ?>' width='100' height='100' /></th>
 					</tr>
 					<tr>
 						<th>Matricule Etablissement : </th>

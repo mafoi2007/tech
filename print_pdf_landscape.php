@@ -3,7 +3,7 @@
 	require_once('inc/pdfL.class.php');
 	
 	$pdf = new pdf('L', 'mm', 'A4');
-	$pdf->SetFillColor(155, 150, 149);
+	$pdf->SetFillColor(200,205,180);
 	
 	
 	
@@ -13,6 +13,7 @@
 	if(isset($_SESSION['print'])){
 		if($_SESSION['print']=='releveEleve'){
 			$classe = $_SESSION['releve'];
+			// $pdf->SetFillColor(155, 150, 149);
 			// La page doit s'afficher en fonction de la section 
 			if($classe['section']=='en'){
 				$pdf->addPage();
@@ -267,169 +268,197 @@
 
 
 
-		elseif($_SESSION['print']=='RapportTrimestriel'){
-			$pdf->addPage();
-			$pdf->Entete();
-			$classe = $_SESSION['classe'];
-			$pdf->rapportTrimestre($classe, $classe['classe']['section']);
-			$pdf->brefTrimestre($classe, $classe['classe']['section']);
-			$fileName='Recapitulatif_';
-			$fileName.= str_replace(' ','_',$classe['classe']['nom_classe']);
-			$fileName .= '_trimestre_'.$classe['periode'].'.pdf';
-			$pdf->Output($fileName, 'I');	
-		}
-
-
-
-
-
-
-
-
-		elseif($_SESSION['print']=='RecapMatiere'){
-			$pdf->addPage();
-			$pdf->Entete();
-			$title = "Statistiques des Notes de : ";
-			$title .= strtoupper($_SESSION['matiere']['nom_matiere']);
-			$pdf->Titre($title);
-			$pdf->Ln(5);
-			$periode = 'Période Concernée : Trimestre '.$_SESSION['matiere']['trimestre'];
-			$pdf->Cell(145,10,utf8_decode($periode), 0,0,'L');
-			$pdf->Ln(15);
-
-			$pdf->SetFont('Times','B',9);
-			// Je positionne l'entete du tableau
-			$pdf->Cell(10, 14, utf8_decode('N°'), 1, 0 , 'C', true);
-			$pdf->Cell(50, 14, 'Classe', 1, 0 , 'C', true);
-			$pdf->Cell(10, 14, 'Coef', 1, 0 , 'C', true);
-			$pdf->Cell(24, 7, 'Effectif', 1, 0 , 'C',true);
-			$pdf->Cell(24, 7, utf8_decode('Evalué'), 1, 0 , 'C',true);
-			$pdf->Cell(24, 7, 'Nb Moyennes', 1, 0 , 'C',true);
-			$pdf->Cell(27, 7, utf8_decode('% Réussite'), 1, 0 , 'C',true);
-			$pdf->Cell(27, 7, 'Forte Note', 1, 0 , 'C',true);
-			$pdf->Cell(27, 7, 'Faible Note', 1, 0 , 'C',true);
-			$pdf->Cell(30, 7, utf8_decode('Moyenne Générale'), 1, 0 , 'C',true);
-
-			$pdf->Ln(7);
-			$pdf->Cell(10, 7, '', 0, 0 , 'C');
-			$pdf->Cell(50, 7, '', 0, 0 , 'C');
-			$pdf->Cell(10, 7, '', 0, 0 , 'C');
-			// Effectif de la classe
-			$pdf->Cell(8, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'T', 1, 0 , 'C',true);
-			// Effectif évalué
-			$pdf->Cell(8, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'T', 1, 0 , 'C',true);
-			// Nombre de Moyennes
-			$pdf->Cell(8, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(8, 7, 'T', 1, 0 , 'C',true);
-			// Taux de Réussite
-			$pdf->Cell(9, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'T', 1, 0 , 'C',true);
-			// Forte Note
-			$pdf->Cell(9, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'T', 1, 0 , 'C',true);
-			// Faible Note
-			$pdf->Cell(9, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(9, 7, 'T', 1, 0 , 'C',true);
-			// Moyenne Générale
-			$pdf->Cell(10, 7, 'M', 1, 0 , 'C');
-			$pdf->Cell(10, 7, 'F', 1, 0 , 'C');
-			$pdf->Cell(10, 7, 'T', 1, 0 , 'C',true);
-
-			$pdf->Ln(7);
-
-
-			$a = 1;
-			// On boucle les classes concernées par la Matière ici 
-			for($i=0;$i<count($_SESSION['classe']);$i++){
-				$nomClasse = $_SESSION['classe'][$i]['nom_classe'];
-				$codeClasse = $_SESSION['classe'][$i]['code_classe'];
-				$coefClasse = $_SESSION['classe'][$i]['coef'];
-				$class = $_SESSION['stat'][$codeClasse];
-				$pdf->Cell(10, 7, $a, 1, 0 , 'C', true);
-				$pdf->Cell(50, 7, $nomClasse, 1, 0 , 'L', true);
-				$pdf->Cell(10, 7, $coefClasse,1,0,'C');
-				$pdf->Cell(8, 7, $class['effM'],1,0,'C');
-				$pdf->Cell(8,7,$class['effF'],1,0,'C');
-				$pdf->Cell(8,7,$class['effT'],1,0,'C',true);
-				$pdf->Cell(8,7,$class['evalM'],1,0,'C');
-				$pdf->Cell(8,7,$class['evalF'],1,0,'C');
-				$pdf->Cell(8,7,$class['evalT'],1,0,'C',true);
-				$pdf->Cell(8,7,$class['moyM'],1,0,'C');
-				$pdf->Cell(8,7,$class['moyF'],1,0,'C');
-				$pdf->Cell(8,7,$class['moyT'],1,0,'C',true);
-				$pdf->Cell(9,7,$class['tauxM'],1,0,'C');
-				$pdf->Cell(9,7,$class['tauxF'],1,0,'C');
-				$pdf->Cell(9,7,$class['tauxT'],1,0,'C',true);
-				$pdf->Cell(9,7,$class['maxM'],1,0,'C');
-				$pdf->Cell(9,7,$class['maxF'],1,0,'C');
-				$pdf->Cell(9,7,$class['maxT'],1,0,'C',true);
-				$pdf->Cell(9,7,$class['minM'],1,0,'C');
-				$pdf->Cell(9,7,$class['minF'],1,0,'C');
-				$pdf->Cell(9,7,$class['minT'],1,0,'C',true);
-				$pdf->Cell(10,7,$class['mgM'],1,0,'C');
-				$pdf->Cell(10,7,$class['mgF'],1,0,'C');
-				$pdf->Cell(10,7,$class['mgT'],1,0,'C',true);
-				$pdf->Ln(7);
-				$a++;
-				$effM[] = $class['effM'];
-				$effF[] = $class['effF'];
-				$effT[] = $class['effT'];
-				$evalM[] = $class['evalM'];
-				$evalF[] = $class['evalF'];
-				$evalT[] = $class['evalT'];
-				$moyM[] = $class['moyM'];
-				$moyF[] = $class['moyF'];
-				$moyT[] = $class['moyT'];
+		if($_SESSION['print']=='TableauHonneurTrimestriel'){
+			$eleve = $_SESSION['eleve'];
+			$ville = strtoupper($_SESSION['information']['ville']);
+			
+			
+			$_SESSION['effectif'] = count($eleve);
+			for($i=0;$i<count($eleve);$i++){
+				$pdf->tableauHonneurTrimestriel($eleve[$i], $_SESSION['section']);
 			}
-			$pdf->Cell(70, 7, 'TOTAL', 1, 0, 'C', true);
-			$pdf->Cell(8,7,array_sum($effM),1,0,'C');
-			$pdf->Cell(8,7,array_sum($effF),1,0,'C');
-			$pdf->Cell(8,7,array_sum($effT),1,0,'C',true);
-			$pdf->Cell(8,7,array_sum($evalM),1,0,'C');
-			$pdf->Cell(8,7,array_sum($evalF),1,0,'C');
-			$pdf->Cell(8,7,array_sum($evalT),1,0,'C',true);
-			$pdf->Cell(8,7,array_sum($moyM),1,0,'C');
-			$pdf->Cell(8,7,array_sum($moyF),1,0,'C');
-			$pdf->Cell(8,7,array_sum($moyT),1,0,'C',true);
-
-			if(array_sum($evalM)!=0){
-				$tauxMasc = array_sum($moyM) * 100 / array_sum($evalM);
-			}else{$tauxMasc = NULL;}
-			if(array_sum($evalF)!=0){
-				$tauxFille = array_sum($moyF) * 100 / array_sum($evalF);
-			}else{$tauxFille = NULL;}
-			if(array_sum($evalT)!=0){
-				$tauxGlob = array_sum($moyT) * 100 / array_sum($evalT);
-			}else{$tauxGlob = NULL;}
-			$pdf->Cell(9,7,round($tauxMasc,2),1,0,'C');
-			$pdf->Cell(9,7,round($tauxFille,2),1,0,'C');
-			$pdf->Cell(9,7,round($tauxGlob,2),1,0,'C',true);
-			// $pdf->SetFillColor(25, 15, 15);
-			/*$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(9,7,'',1,0,'C',true);
-			$pdf->Cell(10,7,'',1,0,'C',true);
-			$pdf->Cell(10,7,'',1,0,'C',true);
-			$pdf->Cell(10,7,'',1,0,'C',true);*/
-			$pdf->SetFillColor(155, 150, 149);
-			$fileName='Statistiques_';
-			$fileName.= str_replace(' ','_',$_SESSION['matiere']['nom_matiere']);
-			$fileName .= '.pdf';
-			$pdf->Output($fileName, 'I');
+			$nomFichier = "tableau_Honneur_Trimestre_".$_SESSION['trimestre']."_".$_SESSION['nom_classe'].".pdf";
+			$pdf->Output($nomFichier, 'I');
 		}
-		
-		
+
+
+
+
+
+
+
+
+
+		if($_SESSION['print']=='TableauHonneurAnnuel'){
+			$eleve = $_SESSION['eleve'];
+			$ville = strtoupper($_SESSION['information']['ville']);
+			
+			
+			$_SESSION['effectif'] = count($eleve);
+			for($i=0;$i<count($eleve);$i++){
+				$pdf->tableauHonneurAnnuel($eleve[$i], $_SESSION['section']);
+			}
+			$nomFichier = "tableau_Honneur_Annuel_".$_SESSION['nom_classe'].".pdf";
+			$pdf->Output($nomFichier, 'I');
+		}
+
+
+
+
+
+
+
+
+
+		if($_SESSION['print']=='StatTrimestriel'){
+			// On récuère tout ce qui a été envoyé dans la variable $info
+			$info = $_SESSION['classe'];
+			$listeClasse = $info['classe'];
+			$ville = strtoupper($_SESSION['information']['ville']);
+
+			$pdf->addPage();
+			$pdf->Entete();
+			$pdf->Titre('Statistiques du Trimestre '.$info['periode']);
+			$pdf->Ln(10);
+			$pdf->setFont('Times', 'B',13);
+			$pdf->Cell(45, 12, 'Classe', 1, 0, 'C', true);
+			$pdf->Cell(30, 6, 'Effectif', 1, 0, 'C', true);
+			$pdf->Cell(30, 6, utf8_decode('Evalués'), 1, 0, 'C', true);
+			$pdf->Cell(30, 6, utf8_decode('Nb Moy.'), 1, 0, 'C', true);
+			$pdf->Cell(40, 6, utf8_decode('Taux'), 1, 0, 'C', true);
+			$pdf->Cell(40, 6, utf8_decode('Forte Moy.'), 1, 0, 'C', true);
+			$pdf->Cell(30, 6, utf8_decode('Faible Moy.'), 1, 0, 'C', true);
+			$pdf->Cell(40, 6, utf8_decode('Moy. Gén.'), 1, 0, 'C', true);
+			$pdf->Ln(6);
+			$pdf->Cell(45, 6, ' ', 0, 0, 'C');
+			// Effectif 
+			$pdf->Cell(10, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'T', 1, 0, 'C',true);
+			// Evalués 
+			$pdf->Cell(10, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'T', 1, 0, 'C',true);
+			// Nb Moy 
+			$pdf->Cell(10, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'T', 1, 0, 'C',true);
+			// Taux 
+			$pdf->Cell(12, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(13, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(15, 6, 'T', 1, 0, 'C',true);
+			// Forte Moyenne 
+			$pdf->Cell(12, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(13, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(15, 6, 'T', 1, 0, 'C',true);
+			// Faible Moyenne 
+			$pdf->Cell(10, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(10, 6, 'T', 1, 0, 'C',true);
+			// Moyenne Générale 
+			$pdf->Cell(12, 6, 'F', 1, 0, 'C',true);
+			$pdf->Cell(13, 6, 'M', 1, 0, 'C',true);
+			$pdf->Cell(15, 6, 'T', 1, 0, 'C',true);
+			$pdf->setFont('Times', '',10);
+			$pdf->Ln(6);
+			for($x=0;$x<count($listeClasse);$x++){
+				// On met ici les statistiques de chaque classe issus de la boucle 
+				$stat = $info['stat'][$x];
+				$effFille[] = $info['stat'][$x]['effFille'];
+				$effMasc[] = $info['stat'][$x]['effMasc'];
+				$effTotal[] = $info['stat'][$x]['effTotal'];
+				$evalFille[] = $info['stat'][$x]['evalFille'];
+				$evalMasc[] = $info['stat'][$x]['evalMasc'];
+				$evalTotal[] = $info['stat'][$x]['evalTotal'];
+				$moyFille[] = $info['stat'][$x]['moyFille'];
+				$moyMasc[] = $info['stat'][$x]['moyMasc'];
+				$moyTotal[] = $info['stat'][$x]['moyTotal'];
+				/*$tauxFille[] = $info['stat'][$x]['tauxFille'];
+				$tauxMasc[] = $info['stat'][$x]['tauxMasc'];
+				$tauxTotal[] = $info['stat'][$x]['tauxTotal'];*/
+				$noteForteFille[] = $info['stat'][$x]['noteForteFille'];
+				$noteForteMasc[] = $info['stat'][$x]['noteForteMasc'];
+				$noteForteTotal[] = $info['stat'][$x]['noteForteTotal'];
+				$noteFaibleFille[] = $info['stat'][$x]['noteFaibleFille'];
+				$noteFaibleMasc[] = $info['stat'][$x]['noteFaibleMasc'];
+				$noteFaibleTotal[] = $info['stat'][$x]['noteFaibleTotal'];
+				$moyGenFille[] = $info['stat'][$x]['moyGenFille'];
+				$moyGenMasc[] = $info['stat'][$x]['moyGenMasc'];
+				$moyGenTotal[] = $info['stat'][$x]['moyGenTotal'];
+
+
+				$pdf->Cell(45, 6, utf8_decode($info['classe'][$x]['nom_classe']), 1, 0, 'L');
+				// Effectif 
+				$pdf->Cell(10, 6, $stat['effFille'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['effMasc'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['effTotal'], 1, 0, 'C');
+				// Evalués 
+				$pdf->Cell(10, 6, $stat['evalFille'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['evalMasc'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['evalTotal'], 1, 0, 'C');
+				// Nb Moy 
+				$pdf->Cell(10, 6, $stat['moyFille'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['moyMasc'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['moyTotal'], 1, 0, 'C');
+				// Taux 
+				$pdf->Cell(12, 6, $stat['tauxFille'], 1, 0, 'C');
+				$pdf->Cell(13, 6, $stat['tauxMasc'], 1, 0, 'C');
+				$pdf->Cell(15, 6, $stat['tauxTotal'], 1, 0, 'C');
+				// Forte Moyenne 
+				$pdf->Cell(12, 6, $stat['noteForteFille'], 1, 0, 'C');
+				$pdf->Cell(13, 6, $stat['noteForteMasc'], 1, 0, 'C');
+				$pdf->Cell(15, 6, $stat['noteForteTotal'], 1, 0, 'C');
+				// Faible Moyenne 
+				$pdf->Cell(10, 6, $stat['noteFaibleFille'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['noteFaibleMasc'], 1, 0, 'C');
+				$pdf->Cell(10, 6, $stat['noteFaibleTotal'], 1, 0, 'C');
+				// Moyenne Générale 
+				$pdf->Cell(12, 6, $stat['moyGenFille'], 1, 0, 'C');
+				$pdf->Cell(13, 6, $stat['moyGenMasc'], 1, 0, 'C');
+				$pdf->Cell(15, 6, $stat['moyGenTotal'], 1, 0, 'C');
+				$pdf->Ln(6);
+			}
+			$pdf->setFont('Times', 'B',12);
+			// $pdf->Ln(6);
+			// Après les statistiques de chaque classe, 
+			// on peut faire une ligne de total pour les statistiques globales de l'établissement
+			$pdf->Cell(45, 6, 'Total', 1, 0, 'C', true);
+			// Effectif
+			$pdf->Cell(10, 6, array_sum($effFille), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($effMasc), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($effTotal), 1, 0, 'C',true);
+			// Evalués
+			$pdf->Cell(10, 6, array_sum($evalFille), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($evalMasc), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($evalTotal), 1, 0, 'C',true);
+			// Nb Moy
+			$pdf->Cell(10, 6, array_sum($moyFille), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($moyMasc), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, array_sum($moyTotal), 1, 0, 'C',true);
+			// Taux
+			$tauxFille = array_sum($moyFille) * 100 / array_sum($evalFille);
+			$tauxMasc = array_sum($moyMasc) * 100 / array_sum($evalMasc);
+			$tauxTotal = array_sum($moyTotal) * 100 / array_sum($evalTotal);
+			$pdf->Cell(12, 6, round($tauxFille, 2), 1, 0, 'C',true);
+			$pdf->Cell(13, 6, round($tauxMasc, 2), 1, 0, 'C',true);
+			$pdf->Cell(15, 6, round($tauxTotal, 2), 1, 0, 'C',true);
+			// Forte Moyenne
+			$pdf->Cell(12, 6, max($noteForteFille), 1, 0, 'C',true);
+			$pdf->Cell(13, 6, max($noteForteMasc), 1, 0, 'C',true);
+			$pdf->Cell(15, 6, max($noteForteTotal), 1, 0, 'C',true);
+			// Faible Moyenne
+			$pdf->Cell(10, 6, min($noteFaibleFille), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, min($noteFaibleMasc), 1, 0, 'C',true);
+			$pdf->Cell(10, 6, min($noteFaibleTotal), 1, 0, 'C',true);
+			// Moyenne Générale
+			$pdf->Cell(12, 6, '', 1, 0, 'C',true);
+			$pdf->Cell(13, 6, '', 1, 0, 'C',true);
+			$pdf->Cell(15, 6, '', 1, 0, 'C',true);
+
+			$nomFichier = "Statistiques du Trimestre ".$info['periode'].".pdf";
+			$pdf->Output($nomFichier, 'I');
+		}
+			
 	}
 	
 	

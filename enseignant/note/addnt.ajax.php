@@ -61,8 +61,8 @@
                                     step = '0.01'
                                     name="<?php echo $name; ?>"
                                     id = "<?php echo $name; ?>" 
-                                    max = '20'
-                                    />
+                                    size='5'
+                                    maxlength='5'/>
                             </td> <?php 
                         } ?>
                         </tr>

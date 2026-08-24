@@ -31,3 +31,36 @@
 		<input type='submit' name='print' value='Valider' />
 <?php 	
 	}
+
+
+
+
+
+
+
+	if(isset($_POST['clas'])){
+		$classe = $_POST['clas'];
+		if($classe=='null'){ ?>
+			
+<?php 			
+		}else{
+			$moisSaisi = $config->getMoisSaisi($classe);
+			if(empty($moisSaisi)){ ?>
+				<h3 class='alert'>Aucune note saisie pour la classe.</h3>
+<?php 				
+			}else{ ?>
+				Mois : <select name='mois' id='mois'>
+					<option value='null' selected>-Choisir le Mois-</option>
+					<?php 
+					for($i=0;$i<count($moisSaisi);$i++){
+						echo "<option value='";
+						echo $moisSaisi[$i]['periode'];
+						echo "'> Mois ".$moisSaisi[$i]['periode']."</option>";
+					} ?>
+				</select>
+				<input type='submit' name='verifMois' value='Vérifier' />
+<?php 				
+				
+			}
+		}
+	}

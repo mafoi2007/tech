@@ -38,30 +38,6 @@
 						matiere = sel.value;
 						xhr.send("matiere="+matiere);
 					}
-					
-					
-					
-					function nbMatiere(){
-						var xhr = getXhr()
-						// On définit ce qu'on va faire quand on aura la reponse 
-						xhr.onreadystatechange = function(){
-							// On ne fait klk choz que si on a tt rxu et ke le serveur est ok
-							if(xhr.readyState==4 && xhr.status==200){
-								leinput = xhr.responseText;
-								// On se sert de l'innerHTML pour rajouter les options à la liste
-								document.getElementById('ajoutMat').innerHTML = leinput;
-							}
-						}
-						// Ici on va voir comment faire du POST
-						xhr.open("POST", "../forms/ajouterMatiere.ajax.php", true);
-						// Ne pas oublier xa pour le POST 
-						xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-						// Ne pas oublier de poster les arguments 
-						// C'est-à-dire l'id de la Classe par exemple
-						sel = document.getElementById('nbMatiere');
-						nbMatiere = sel.value;
-						xhr.send("nbMatiere="+nbMatiere);
-					}
 				</script>
 				<title>Menu : Matières  </title>
 			</head>

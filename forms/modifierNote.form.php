@@ -25,7 +25,7 @@
 	<table border='1' width='90%' align='center'>
 		<tr>
 			<th colspan='5'>
-				<textarea name='competence' required><?php echo stripslashes($verification['competence']); ?></textarea>
+				Compétence évaluée : <textarea name='competence' required><?php echo stripslashes($verification['competence']); ?></textarea>
 			</th>
 		</tr>
 		<tr>
@@ -63,7 +63,7 @@
 					<input 
 						type='number'
 						name='note[]'		
-						step='0.01'
+						step='0.25'
 						max='20'
 						min='0'/>
 				</td>

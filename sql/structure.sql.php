@@ -21,7 +21,6 @@
 	$structure[2] = "CREATE TABLE IF NOT EXISTS classe( ";
 	$structure[2] .= "id int(11) auto_increment primary key, ";
 	$structure[2] .= "section varchar(5) not null, ";
-	$structure[2] .= "sous_section varchar(5) not null, ";
 	$structure[2] .= "nom_classe varchar(100) not null, ";
 	$structure[2] .= "code_classe varchar(10) not null, ";
 	$structure[2] .= "niveau_classe int(2) not null, ";

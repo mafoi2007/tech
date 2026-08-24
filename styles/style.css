@@ -80,12 +80,12 @@ nav {
 	padding:5px 1px;
 	margin:5px 2px;
 	display:inline-block;
-	width:84%;
+	width:100%;
 	text-align:left;
 	/* position:fixed; */
 	/* left:5%; */
 	/* top:15%; */
-	/* border: 1px solid black; */
+	/* border: 1px solid black;*/
 	
 }
 nav ul {

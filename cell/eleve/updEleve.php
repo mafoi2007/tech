@@ -19,7 +19,7 @@
 						type='text'
 						disabled
 						size='40'
-						value='<?php echo $eleve['nom_complet']; ?>'
+						value="<?php echo $eleve['nom_complet']; ?>"
 						/>
 				</td>
 				<td><input 
@@ -29,7 +29,7 @@
 						required
 						size='40'
 						maxlength='50'
-						value='<?php echo $eleve['nom_complet']; ?>'
+						value="<?php echo $eleve['nom_complet']; ?>"
 						/>
 				</td>
 			</tr>
@@ -234,7 +234,7 @@
 						disabled
 						size='40'
 						maxlength='50'
-						value='<?php echo $eleve['nom_pere']; ?>'
+						value="<?php echo $eleve['nom_pere']; ?>"
 						/>
 				</td>
 				<td><input 
@@ -243,7 +243,7 @@
 						id='nomPereEleve'
 						size='40'
 						maxlength='50'
-						value='<?php echo $eleve['nom_pere']; ?>'
+						value="<?php echo $eleve['nom_pere']; ?>"
 						/>
 				</td>
 			</tr>
@@ -257,7 +257,7 @@
 						disabled
 						size='40'
 						maxlength='50'
-						value='<?php echo $eleve['nom_mere']; ?>'
+						value="<?php echo $eleve['nom_mere']; ?>"
 						/>
 				</td>
 				<td><input 
@@ -267,7 +267,7 @@
 						size='40'
 						required
 						maxlength='50'
-						value='<?php echo $eleve['nom_mere']; ?>'
+						value="<?php echo $eleve['nom_mere']; ?>"
 						/>
 				</td>
 			</tr>

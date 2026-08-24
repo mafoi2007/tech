@@ -121,4 +121,3 @@
 	$data[] = "INSERT INTO groupe(nom_groupe, code_groupe) VALUES('Groupe 2','gp2')";
 	$data[] = "INSERT INTO groupe(nom_groupe, code_groupe) VALUES('Groupe 3','gp3')";
 	$data[] = "INSERT INTO groupe(nom_groupe, code_groupe) VALUES('Groupe 4','gp4')";
-	$data[] = "INSERT INTO groupe(nom_groupe, code_groupe) VALUES('Groupe 5','gp5')";

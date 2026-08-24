@@ -340,8 +340,8 @@
 		************ Supprimer une rubrique de la classe *****************************
 		**************************************************************************/
 		public function supprimerRubriqueClasse($source, $rubrique){
-			$this->_rubrique = $this->setUserId($rubrique);
-			$sql = "DELETE FROM rubrique_classe WHERE id = '$this->_rubrique'";
+			$this->rubrique = (int) $rubrique;
+			$sql = "DELETE FROM rubrique_classe WHERE id = '$this->rubrique'";
 			$this->_db->query($sql);
 		}
 		

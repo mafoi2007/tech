@@ -13,7 +13,7 @@
 		
 			
 		function Entete(){
-			$this->Image('images/logo.jpg', 125, 20, 25);
+			$this->Image('images/logo.png', 125, 20, 25);
 			$this->SetFont('Times','',8);
 			$this->Cell(90,10, $this->convert($_SESSION['information']['pays_fr']),0,0,'C');
 			$this->Cell(80,10, $this->convert(''),0,0,'C');
@@ -22,7 +22,7 @@
 			$this->Ln(4);
 			
 			$this->Cell(90,10, $this->convert($_SESSION['information']['devise_fr']),0,0,'C');
-			$this->Cell(80,10, $this->convert('ee'),0,0,'C');
+			$this->Cell(80,10, $this->convert(''),0,0,'C');
 			$this->Cell(90,10, $this->convert($_SESSION['information']['devise_en']),0,0,'C');
 			$this->Ln(3);
 			
@@ -138,90 +138,169 @@
 
 
 
-
-
-
-
-		public function rapportTrimestre($classe, $section){
-			$titre['fr'] = "Rapport Trimestriel";
-			$titre['en'] = "End of Term report";
-			$this->Titre($titre[$section]);
-			$libClasse['fr'] = "Classe : ".$classe['classe']['nom_classe'];
-			$libPeriode['fr'] = "Période : Trimestre ".$classe['periode'];
-			$libClasse['en'] = "Class : ".$classe['classe']['nom_classe'];
-			$libPeriode['en'] = "Period : Term ".$classe['periode'];
-
-			$this->Ln(5);
-			$this->setFont('Times', 'B', 14);
-			$this->Cell(85,6,utf8_decode($libClasse[$section]),0,0,'L');
-			$this->Cell(85,6,'',0,0,'C');
-			$this->Cell(85,6,utf8_decode($libPeriode[$section]),0,0,'L');
-
-			$libNum['fr'] = 'N°';
-			$libNom['fr'] = "Nom de l'élève";
-			$libSexe['fr'] = "Sexe";
-			$libStatut['fr'] = "Statut";
-			$libNum['en'] = 'N°';
-			$libNom['en'] = "Student Name";
-			$libSexe['en'] = "Sex";
-			$libStatut['en'] = "Status";
-			$libTot['fr'] = 'Total';
-			$libMoy['fr'] = 'Moyenne';
-			$libRank['fr'] = 'Rang';
-			$libCote['fr'] = 'Cote';
-			$libAppr['fr'] = 'Appr';
-			$libTot['en'] = 'Total';
-			$libMoy['en'] = 'Average';
-			$libRank['en'] = 'Rank';
-			$libCote['en'] = 'Grade';
-			$libAppr['en'] = 'Appr';
-			
-			$this->Ln(8);
-			$this->setFont('Times', '', 10);
-			$this->Cell(10, 5, utf8_decode($libNum[$section]), 1,0, 'C', true);
-			$this->Cell(45, 5, utf8_decode($libNom[$section]), 1,0, 'C', true);
-			$this->Cell(8, 5, utf8_decode($libSexe[$section]), 1,0, 'C', true);
-			$this->Cell(8, 5, utf8_decode($libStatut[$section]), 1,0, 'C', true);
-			for($i=0;$i<count($classe['matiere']);$i++){
-				$codeMat = $classe['matiere'][$i]['code_matiere'];
-				$this->Cell(10,5,strtolower($codeMat),1,0,'C', true);
+		public function tableauHonneurTrimestriel($eleve, $section){
+			$this->addPage();
+			$this->Entete();
+			if($_SESSION['trimestre']==1){
+				$titreTrimestre['fr'] = 'Premier Trimestre';
+				$titreTrimestre['en'] = 'First Term';
+			}elseif($_SESSION['trimestre']==2){
+				$titreTrimestre['fr'] = 'Deuxieme Trimestre';
+				$titreTrimestre['en'] = 'Second Term';
+			}elseif($_SESSION['trimestre']==3){
+				$titreTrimestre['fr'] = 'Troisieme Trimestre';
+				$titreTrimestre['en'] = 'Third Term';
 			}
-			$this->Cell(12, 5, utf8_decode($libTot[$section]), 1,0, 'C', true);
-			$this->Cell(12, 5, utf8_decode($libMoy[$section]), 1,0, 'C', true);
-			$this->Cell(10, 5, utf8_decode($libRank[$section]), 1,0, 'C', true);
-			$this->Cell(10, 5, utf8_decode($libCote[$section]), 1,0, 'C', true);
-			$this->Cell(10, 5, utf8_decode($libAppr[$section]), 1,0, 'C', true);
-			$this->Ln(5);
+			// On met le titre du document 
+			$titre['fr'] = "Tableau d'Honneur";
+			$titre['en'] = "Honour Holl";
+			$this->SetFont('Times','BUI',24);
+			$this->Text(100,75,strtoupper(utf8_decode($titre[$section])));
 
-			$a = 1;
-			for($x=0;$x<count($classe['eleve']);$x++){
-				$nomEleve = substr($classe['eleve'][$x]['nom_eleve'],0,20);
-				$sexeEleve = $classe['eleve'][$x]['sexe'];
-				$statutEleve = $classe['eleve'][$x]['statut'];
-				$this->Cell(10, 5, utf8_decode($a), 1,0, 'C');
-				$this->Cell(45, 5, utf8_decode($nomEleve), 1,0, 'L');
-				$this->Cell(8, 5, utf8_decode($sexeEleve), 1,0, 'C');
-				$this->Cell(8, 5, utf8_decode($statutEleve), 1,0, 'C');
-				for($y=0;$y<count($classe['matiere']);$y++){
-					$codeMat = strtolower($classe['matiere'][$y]['code_matiere']);
-					$cle = $codeMat.'_trim';
-					$noteEleve = $classe['eleve'][$x][$cle];
-					$this->Cell(10,5,strtolower($noteEleve),1,0,'C');
-				}
-				$totalpoint = $classe['eleve'][$x]['total_point'];
-				$moyenneEleve = $classe['eleve'][$x]['moyenne'];
-				$rangEleve = $classe['eleve'][$x]['rang'];
-				$coteEleve = $classe['eleve'][$x]['cote'];
-				$apprEleve = $classe['eleve'][$x]['appreciation'];
-				$this->Cell(12, 5, utf8_decode($totalpoint), 1,0, 'C');
-				$this->Cell(12, 5, utf8_decode($moyenneEleve), 1,0, 'C', true);
-				$this->Cell(10, 5, utf8_decode($rangEleve), 1,0, 'C');
-				$this->Cell(10, 5, utf8_decode($coteEleve), 1,0, 'C');
-				$this->Cell(10, 5, utf8_decode($apprEleve), 1,0, 'L');
-				$a++;
+			$this->SetFont('Times','',14);
+			$lib_nom['fr'] = "Attribué à l'élève : ";
+			$lib_nom['en'] = 'Attributed to :';
+			$lib_classe['fr'] = 'De la Classe de  : ';
+			$lib_classe['en'] = 'From Class  : ';
+			$lib_matricule['fr'] = 'Matricule. : ';
+			$lib_matricule['en'] = 'Identifier. : ';
+			$lib_effectif['fr'] = 'Effectif Classe : ';
+			$lib_effectif['en'] = 'Roll : ';
+			$lib_dateNaissance['fr'] = "Né(e) le : ";
+			$lib_dateNaissance['en'] = "Born on : ";
+			$lib_lieuNaissance['fr'] = 'à : ';
+			$lib_lieuNaissance['en'] = 'at : ';
+			$lib_sexe['fr'] = 'Pour le : ';
+			$lib_sexe['en'] = 'For the : ';
+			$lib_redoublant['fr'] = "De l'année Scolaire : ";
+			$lib_redoublant['en'] = "Of the School Year : ";
+			$lib_moyenne['fr'] = 'Moyenne Obtenue : ';
+			$lib_moyenne['en'] = 'Average obtained : ';
+			$lib_rang['fr'] = 'Rang : ';
+			$lib_rang['en'] = 'Rank : ';
+			$encouragement['fr'] = "Avec Encouragements";
+			$encouragement['en'] = "With Encouragements";
+			$felicitation['fr'] = "Avec Félicitations";
+			$felicitation['en'] = "With Congratulations";
+			$this->Text(40,85,utf8_decode($lib_nom[$section]));
+			$this->Text(40,95,utf8_decode($lib_dateNaissance[$section]));
+			$this->Text(130,95,utf8_decode($lib_lieuNaissance[$section]));
+			$this->Text(40,105,utf8_decode($lib_classe[$section]));
+			$this->Text(175,105,utf8_decode($lib_matricule[$section]));
+			$this->Text(40,115,utf8_decode($lib_sexe[$section]));
+			$this->Text(175,115,utf8_decode($lib_redoublant[$section]));
+			$this->Text(40,125,utf8_decode($lib_moyenne[$section]));
+			$this->Text(175,125,utf8_decode($lib_rang[$section]));
+
+			$this->SetFont('Times','B',14);
+			$nom = substr($eleve['nom_eleve'],0,30);
+			$nomClasse = substr(strtoupper($_SESSION['nom_classe']),0,30);
+			$matricule = $eleve['rne'];
+			// $effectif = $_SESSION['effectif'];
+			$effectif = $eleve['classes'];
+			$dateNaissance = $eleve['date_fr'];
+			$lieuNaissance = $eleve['lieu_naissance'];
+			$sexe = $eleve['sexe'];
+			$redoublant = $eleve['statut'];
+			$as = $_SESSION['information']['annee_scolaire'];
+			$titulaire = substr($eleve['titulaire'],0,20);
+			$image =$eleve['photo'];
+			$moyenne = $eleve['moyenne']." / 20";
+			$rang = $eleve['rang']." / ".$effectif;			
+			$this->Text(90,85,utf8_decode($nom));
+			$this->Text(90,95,utf8_decode($dateNaissance));
+			$this->Text(145,95,utf8_decode($lieuNaissance));
+			$this->Text(90,105,utf8_decode($nomClasse));
+			$this->Text(200,105,utf8_decode($matricule));
+			$this->Text(90,115,utf8_decode($titreTrimestre[$section]));
+			$this->Text(220,115,utf8_decode($as));
+			$this->Text(90,125,utf8_decode($moyenne));
+			$this->Text(220,125,utf8_decode($rang));
+			$this->SetFont('Times','BI',18);
+			if($eleve['moyenne'] >=14){
+				$this->Text(40, 135, utf8_decode($encouragement[$section]));
+			}
+			if($eleve['moyenne'] >=15){
+				$this->Text(40, 145, utf8_decode($felicitation[$section]));
+			}			
+			$this->Image($image, 245, 75, 30, 30);
+
+			$this->SetFont('Times','B',14);
+			$ville = $_SESSION['information']['ville'];
+			$faitA['fr'] = 'Fait à '.strtoupper($ville).' le ________________';
+			$faitA['en'] = 'Done at '.strtoupper($ville).' the ________________';
+			$signataire['fr'] = $_SESSION['information']['signataire_fr'];
+			$signataire['en'] = $_SESSION['information']['signataire_en'];
+			$this->Text(180, 150, utf8_decode($faitA[$section]));
+			$this->Text(200,160, utf8_decode($signataire[$section]));
+			// On créé un espace supplémentaire entre le tableau et les info du haut
+			$this->Ln(40);
+			$this->SetFont('Times','B',8);
+			$bullMatiere['fr'] = 'Matière';
+			$bullMatiere['en'] = 'Subject';
+			$bullCompetence['fr'] = 'Compétences évaluées';
+			$bullCompetence['en'] = 'Skills evaluated';
+			$bullNote['fr'] = 'N /20';
+			$bullNote['en'] = 'M/20';
+			$bullNoteTri['fr'] = 'M/20';
+			$bullNoteTri['en'] = 'A/20';
+			$bullCoef['fr'] = 'Coef';
+			$bullCoef['en'] = 'Coef';
+			$bullProduit['fr'] = 'M x Coef';
+			$bullProduit['en'] = 'A x Coef';
+			$bullMinMax['fr'] = 'Min - Max';
+			$bullMinMax['en'] = 'Min - Max';
+			$bullAppr['fr'] = 'Appréciation';
+			$bullAppr['en'] = 'Grade';
+			$bullCote['fr'] = 'Cote';
+			$bullCote['en'] = 'Cote';
+			$bullParaphe['fr'] = 'Paraphe Ens.';
+			$bullParaphe['en'] = 'Teacher Obs.';
+			$this->Cell(8);
+			// $this->Cell(40,5, utf8_decode($bullMatiere[$section]),1,0,'C',true);
+			// $this->Cell(35,5, utf8_decode($bullCompetence[$section]),1,0,'C',true);
+			// $this->Cell(12,5, utf8_decode($bullNote[$section]),1,0,'C',true);
+			// $this->Cell(12,5, utf8_decode($bullNoteTri[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode($bullCoef[$section]),1,0,'C',true);
+			// $this->Cell(15,5, utf8_decode($bullProduit[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode($bullCote[$section]),1,0,'C',true);
+			// $this->Cell(18,5, utf8_decode($bullMinMax[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode('Max'),1,0,'C',true);
+			// $this->Cell(22,5, utf8_decode($bullAppr[$section]),1,0,'C',true);
+			// $this->Cell(20,5, utf8_decode($bullParaphe[$section]),1,0,'C',true);
+			$this->SetFont('Times','',8);
+			$this->Ln(5);
+			// // On ressort une boucle qui liste les groupes définis
+			for($b=0;$b<count($_SESSION['groupe']);$b++){
+				$codeGroupe = $_SESSION['groupe'][$b]['code_groupe'];
+				$idGroupe = $_SESSION['groupe'][$b]['groupe'];
+				$nomGroupe = $_SESSION['groupe'][$b]['nom_groupe'];
+				$matieresGroupe = $_SESSION['matiereGroupe'][$idGroupe];
+				
+				
+				// $this->Cell(20,5, '',1,0,'C',true);
 				$this->Ln(5);
+				$this->SetFont('Times','',7);
 			}
-			$this->Ln(5);
+			
+			
+			
+			
+			$parent['fr'] = 'Le Parent';
+			$parent['en'] = 'The Parent';
+			$pp['fr'] = 'Le Professeur Principal';
+			$pp['en'] = 'The Class Principal';
+			
+
+			
+			
+			$this->Ln(6);
+			$this->Cell(8);
+
+			
+
+			
+			
 		}
 
 
@@ -231,57 +310,169 @@
 
 
 
-		public function brefTrimestre($classe, $section){
-			$titre['fr'] = 'En Bref';
-			$titre['en'] = 'In Brief';
-			$this->Titre($titre[$section]);
+		public function tableauHonneurAnnuel($eleve, $section){
+			$this->addPage();
+			$this->Entete();
+			$titreTrim1['fr'] = 'Trim 1 : ';
+			$titreTrim1['en'] =  'Term 1 : ';
+			$titreTrim2['fr'] = 'Trim 2 : ';
+			$titreTrim2['en'] =  'Term 2 : ';
+			$titreTrim3['fr'] = 'Trim 3 : ';
+			$titreTrim3['en'] =  'Term 3 : ';
+			// On met le titre du document 
+			$titre['fr'] = "Tableau d'Honneur Annuel";
+			$titre['en'] = "Annual Honour Holl";
+			$this->SetFont('Times','BUI',24);
+			$this->Text(100,75,strtoupper(utf8_decode($titre[$section])));
+
+			$this->SetFont('Times','',14);
+			$lib_nom['fr'] = "Attribué à l'élève : ";
+			$lib_nom['en'] = 'Attributed to :';
+			$lib_classe['fr'] = 'De la Classe de  : ';
+			$lib_classe['en'] = 'From Class  : ';
+			$lib_matricule['fr'] = 'Matricule. : ';
+			$lib_matricule['en'] = 'Identifier. : ';
+			$lib_effectif['fr'] = 'Effectif Classe : ';
+			$lib_effectif['en'] = 'Roll : ';
+			$lib_dateNaissance['fr'] = "Né(e) le : ";
+			$lib_dateNaissance['en'] = "Born on : ";
+			$lib_lieuNaissance['fr'] = 'à : ';
+			$lib_lieuNaissance['en'] = 'at : ';
+			$lib_t1['fr'] = 'Pour le : ';
+			$lib_t1['en'] = 'For the : ';
+			$lib_redoublant['fr'] = "De l'année Scolaire : ";
+			$lib_redoublant['en'] = "Of the School Year : ";
+			$lib_moyenne['fr'] = 'Moyenne Annuelle : ';
+			$lib_moyenne['en'] = 'Annual Average : ';
+			$lib_rang['fr'] = 'Rang : ';
+			$lib_rang['en'] = 'Rank : ';
+			$encouragement['fr'] = "Avec Encouragements";
+			$encouragement['en'] = "With Encouragements";
+			$felicitation['fr'] = "Avec Félicitations";
+			$felicitation['en'] = "With Congratulations";
+			$this->Text(40,85,utf8_decode($lib_nom[$section]));
+			$this->Text(40,95,utf8_decode($lib_dateNaissance[$section]));
+			$this->Text(130,95,utf8_decode($lib_lieuNaissance[$section]));
+			$this->Text(40,105,utf8_decode($lib_classe[$section]));
+			$this->Text(175,105,utf8_decode($lib_matricule[$section]));
+			$this->Text(40,115,utf8_decode($titreTrim1[$section]));
+			$this->Text(100,115,utf8_decode($titreTrim2[$section]));
+			$this->Text(160,115,utf8_decode($titreTrim3[$section]));
+			// $this->Text(175,115,utf8_decode($lib_redoublant[$section]));
+			$this->Text(40,125,utf8_decode($lib_moyenne[$section]));
+			$this->Text(175,125,utf8_decode($lib_rang[$section]));
+
+			$this->SetFont('Times','B',14);
+			$nom = substr($eleve['nom_eleve'],0,30);
+			$nomClasse = substr(strtoupper($_SESSION['nom_classe']),0,30);
+			$matricule = $eleve['rne'];
+			// $effectif = $_SESSION['effectif'];
+			$effectif = $eleve['classes'];
+			$dateNaissance = $eleve['date_fr'];
+			$lieuNaissance = $eleve['lieu_naissance'];
+			$sexe = $eleve['sexe'];
+			$redoublant = $eleve['statut'];
+			$as = $_SESSION['information']['annee_scolaire'];
+			$titulaire = substr($eleve['titulaire'],0,20);
+			$image =$eleve['photo'];
+			$moyenne = $eleve['moyenne']." / 20";
+			$rang = $eleve['rang']." / ".$effectif;			
+			$this->Text(90,85,utf8_decode($nom));
+			$this->Text(90,95,utf8_decode($dateNaissance));
+			$this->Text(145,95,utf8_decode($lieuNaissance));
+			$this->Text(90,105,utf8_decode($nomClasse));
+			$this->Text(200,105,utf8_decode($matricule));
+			/*$this->Text(90,115,utf8_decode($titreTrimestre[$section]));*/
+			$this->Text(60,115,utf8_decode($eleve['moyenne_1']));
+			$this->Text(120,115,utf8_decode($eleve['moyenne_2']));
+			$this->Text(180,115,utf8_decode($eleve['moyenne_3']));
+			$this->Text(90,125,utf8_decode($moyenne));
+			$this->Text(220,125,utf8_decode($rang));
+			$this->SetFont('Times','BI',18);
+			if($eleve['moyenne'] >=14){
+				$this->Text(40, 135, utf8_decode($encouragement[$section]));
+			}
+			if($eleve['moyenne'] >=15){
+				$this->Text(40, 145, utf8_decode($felicitation[$section]));
+			}			
+			$this->Image($image, 245, 75, 30, 30);
+
+			$this->SetFont('Times','B',14);
+			$ville = $_SESSION['information']['ville'];
+			$faitA['fr'] = 'Fait à '.strtoupper($ville).' le ________________';
+			$faitA['en'] = 'Done at '.strtoupper($ville).' the ________________';
+			$signataire['fr'] = $_SESSION['information']['signataire_fr'];
+			$signataire['en'] = $_SESSION['information']['signataire_en'];
+			$this->Text(180, 150, utf8_decode($faitA[$section]));
+			$this->Text(200,160, utf8_decode($signataire[$section]));
+			// On créé un espace supplémentaire entre le tableau et les info du haut
+			$this->Ln(40);
+			$this->SetFont('Times','B',8);
+			$bullMatiere['fr'] = 'Matière';
+			$bullMatiere['en'] = 'Subject';
+			$bullCompetence['fr'] = 'Compétences évaluées';
+			$bullCompetence['en'] = 'Skills evaluated';
+			$bullNote['fr'] = 'N /20';
+			$bullNote['en'] = 'M/20';
+			$bullNoteTri['fr'] = 'M/20';
+			$bullNoteTri['en'] = 'A/20';
+			$bullCoef['fr'] = 'Coef';
+			$bullCoef['en'] = 'Coef';
+			$bullProduit['fr'] = 'M x Coef';
+			$bullProduit['en'] = 'A x Coef';
+			$bullMinMax['fr'] = 'Min - Max';
+			$bullMinMax['en'] = 'Min - Max';
+			$bullAppr['fr'] = 'Appréciation';
+			$bullAppr['en'] = 'Grade';
+			$bullCote['fr'] = 'Cote';
+			$bullCote['en'] = 'Cote';
+			$bullParaphe['fr'] = 'Paraphe Ens.';
+			$bullParaphe['en'] = 'Teacher Obs.';
+			$this->Cell(8);
+			// $this->Cell(40,5, utf8_decode($bullMatiere[$section]),1,0,'C',true);
+			// $this->Cell(35,5, utf8_decode($bullCompetence[$section]),1,0,'C',true);
+			// $this->Cell(12,5, utf8_decode($bullNote[$section]),1,0,'C',true);
+			// $this->Cell(12,5, utf8_decode($bullNoteTri[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode($bullCoef[$section]),1,0,'C',true);
+			// $this->Cell(15,5, utf8_decode($bullProduit[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode($bullCote[$section]),1,0,'C',true);
+			// $this->Cell(18,5, utf8_decode($bullMinMax[$section]),1,0,'C',true);
+			// $this->Cell(10,5, utf8_decode('Max'),1,0,'C',true);
+			// $this->Cell(22,5, utf8_decode($bullAppr[$section]),1,0,'C',true);
+			// $this->Cell(20,5, utf8_decode($bullParaphe[$section]),1,0,'C',true);
+			$this->SetFont('Times','',8);
+			$this->Ln(5);
+			// // On ressort une boucle qui liste les groupes définis
+			for($b=0;$b<count($_SESSION['groupe']);$b++){
+				$codeGroupe = $_SESSION['groupe'][$b]['code_groupe'];
+				$idGroupe = $_SESSION['groupe'][$b]['groupe'];
+				$nomGroupe = $_SESSION['groupe'][$b]['nom_groupe'];
+				$matieresGroupe = $_SESSION['matiereGroupe'][$idGroupe];
+				
+				
+				// $this->Cell(20,5, '',1,0,'C',true);
+				$this->Ln(5);
+				$this->SetFont('Times','',7);
+			}
+			
+			
+			
+			
+			$parent['fr'] = 'Le Parent';
+			$parent['en'] = 'The Parent';
+			$pp['fr'] = 'Le Professeur Principal';
+			$pp['en'] = 'The Class Principal';
+			
 
 			
-			$libEff['fr'] = 'Effectif';
-			$libEval['fr'] = 'Evalués';
-			$libMoy['fr'] = 'Nb Moyenne';
-			$libTaux['fr'] = 'Taux';
-			$libForte['fr'] = 'Forte Moy';
-			$libFaible['fr'] = 'Faible Moy';
-			$libEff['en'] = 'Roll';
-			$libEval['en'] = 'Evaluated';
-			$libMoy['en'] = 'Averages';
-			$libTaux['en'] = 'Percentage';
-			$libForte['en'] = 'Best Aver';
-			$libFaible['en'] = 'Weak Aver';
-			$this->Ln(5);
-			$this->setFont('Times', 'B', 12);
-			$this->Cell(45,5,utf8_decode($libEff[$section]),1,0,'C',true);
-			$this->Cell(45,5,utf8_decode($libEval[$section]),1,0,'C',true);
-			$this->Cell(45,5,utf8_decode($libMoy[$section]),1,0,'C',true);
-			$this->Cell(45,5,utf8_decode($libTaux[$section]),1,0,'C',true);
-			$this->Cell(45,5,utf8_decode($libForte[$section]),1,0,'C',true);
-			$this->Cell(45,5,utf8_decode($libFaible[$section]),1,0,'C',true);
-			$this->Ln(5);
-			for($i=0;$i<6;$i++){
-				$this->Cell(15,5,'F',1,0,'C');
-				$this->Cell(15,5,'M',1,0,'C');
-				$this->Cell(15,5,'T',1,0,'C');
-			}
-			$this->Ln(5);
-			$this->Cell(15,5,$classe['stat']['effFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['effMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['effTotal'],1,0,'C',true);
-			$this->Cell(15,5,$classe['stat']['evalFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['evalMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['evalTotal'],1,0,'C',true);
-			$this->Cell(15,5,$classe['stat']['moyFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['moyMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['moyTotal'],1,0,'C',true);
-			$this->Cell(15,5,$classe['stat']['tauxFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['tauxMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['tauxTotal'],1,0,'C',true);
-			$this->Cell(15,5,$classe['stat']['noteForteFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['noteForteMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['noteForteTotal'],1,0,'C',true);
-			$this->Cell(15,5,$classe['stat']['noteFaibleFille'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['noteFaibleMasc'],1,0,'C');
-			$this->Cell(15,5,$classe['stat']['noteFaibleTotal'],1,0,'C',true);
+			
+			$this->Ln(6);
+			$this->Cell(8);
+
+			
+
+			
+			
 		}
 		
 		

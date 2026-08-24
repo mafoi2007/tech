@@ -1,6 +1,6 @@
 <?php 
 	$verification = $config->verifNoteSaisie($classe, $matiere, $sequence);
-	// echo '<pre>'; print_r($verification); echo '</pre>';
+	// echo '<pre>'; print_r($listeNote); echo '</pre>';
 	if(!empty($verification)){ ?>
 <form method='post' action='../traitement.php' target='_blank'>
 	<input 
@@ -24,14 +24,19 @@
 	</fieldset>
 	<table border='1' width='90%' align='center'>
 		<tr>
-			<th colspan='5'>
-				<textarea name='competence' required><?php echo stripslashes($verification['competence']); ?></textarea>
+			<th colspan='15'>
+				Compétence évaluée : 
+				<?php echo stripslashes($verification['competence']); ?>
 			</th>
 		</tr>
 		<tr>
 			<th>N°</th>
 			<th>Noms et Prénoms</th>
-			<th>Note Enregistrée</th>
+			<th>Note /20</th>
+			<th>Coef</th>
+			<th>Produit</th>
+			<th>Appr</th>
+			<th>Côte</th>
 			<th>Observations</th>
 			
 		<?php 
@@ -46,18 +51,19 @@
 						name='eleve[]'
 						value='<?php echo $listeEleve[$i]['id']; ?>' />
 				</td>
-				<td>
+				
 					<?php 
 					for($x=0;$x<count($listeNote);$x++){
 						if($listeEleve[$i]['id']==$listeNote[$x]['id_eleve']){
-							echo $listeNote[$x]['note'];
+							echo "<td>".$listeNote[$x]['note']."</td>";
+							echo "<td>".$listeNote[$x]['coef']."</td>";
+							echo "<td>".$listeNote[$x]['produit']."</td>";
+							echo "<td>".$listeNote[$x]['appreciation']."</td>";
+							echo "<td>".$listeNote[$x]['cote']."</td>";
+							echo "<td>".$listeNote[$x]['observation']."</td>";
 						}
 					}
 					?>	
-				</td>
-				<td>
-					&nbsp;
-				</td>
 			</tr>
 <?php 	
 			$a++;

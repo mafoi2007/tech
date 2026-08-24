@@ -8,7 +8,8 @@
         echo "<h3 class='alert'>Vous devez choisir une classe.</h3>";
     }else{
         $matiere = $config->getMatiereSaisieProf($_SESSION['user']['id'], $_POST['classe']);
-        // print_r($matiere);
+        // $_SESSION['classe'] = $classe;
+        // echo '<pre>'; print_r($matiere); echo '</pre>';
         if(empty($matiere)){
             echo "<h3 class='alert'>Il semble que vous n'ayez pas de matière dans cette classe.</h3>";
         }else{ ?>

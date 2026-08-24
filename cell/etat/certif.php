@@ -10,6 +10,7 @@
 				placeholder='Entrer une partie du nom'
 				onKeyup='findEleve()' />
 		</p>
+		<?php /*echo '<pre>'; print_r($_SESSION); echo '</pre>'; */?>
 		<div id='resultat' style = 'display:inline'>	
 		</div>
 	</form>

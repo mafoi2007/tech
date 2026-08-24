@@ -4,8 +4,6 @@
 	$verifConn = include_once('inc/firstConnexion.php');
 	$config = new config($db);
 	
-	$config->updateApp();
-	
 	if(isset($_SESSION['message'])){
 		echo "<script>alert('".$_SESSION['message']."');</script>";
 	}unset($_SESSION['message']);
@@ -22,10 +20,3 @@
 	}else{
 		require_once('inc/firstConnexion.php');
 	}
-	
-	// $eleves = $config->listeEleve(7);
-	// for($i=0;$i<count($users);$i++){
-		// $user = $users[$i]['idEnseignant'];
-		// echo $user;
-		// $config->arranger($user);
-	// }

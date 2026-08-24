@@ -4,28 +4,32 @@
 **********************************************************************/
 $menu['cell']['etat']['libelle'] = array("certificat de scolarité",
 										 "liste des élèves",
+										 "liste des élèves avec photos",
 										 "Vue d'ensemble des effectifs",
 										 "Relevé de Notes des Enseignants",
 										 "Liste des Professeurs Principaux",
-										 "Conseil de classe",
-										 "editer les bulletins séquentiels",
-										 "editer les bulletins trimestriels",
-										 "editer les bulletins annuels",
-										 "recapitulatif trimestriel",
-										 "PV des notes par matière",
-										 "Relevé de Notes Annuelles");
+										 "Conseil de classe"
+										/* "editer les bulletins mensuels",*/
+										/* "editer les bulletins trimestriels",*/
+										/* "editer les tableaux d'honneur",*/
+										/* "editer les bulletins annuels",*/
+										/* "recapitulatif trimestriel",*/
+										 /*"PV des notes par matière",*/
+										 /*"Relevé de Notes Annuelles"*/);
 $menu['cell']['etat']['lien'] = array("certif", 
 									"listeEleve",
+									"listeElevePhoto",
 									"vueEff",
 									"relNote",
 									"listePP",
-									"conseil",
-									"bullseq",
-									"bullTrim",
-									"bullAnn",
-									"recapTrim",
-									"recapMatiere",
-									"relNoteAnnuelle");
+									"conseil"
+									/*"bullseq",*/
+									/*"bullTrim",*/
+									/*"tabHonn",*/
+									/*"bullAnn",*/
+									/*"recapTrim",*/
+									/*"recapMatiere",*/
+									/*"relNoteAnnuelle"*/);
 
 $menu['cell']['parametre']['libelle'] = array("modifier un mot de passe",
 												"ajouter des photos",
@@ -33,7 +37,6 @@ $menu['cell']['parametre']['libelle'] = array("modifier un mot de passe",
 												"Attribuer une matière à la classe",
 												"Attribuer plusieurs matières à une classe",
 												"Modifier une matière de la classe",
-												'Retirer une matière de la classe',
 												"Créer les dates pour les absences",
 												"Attribuer une matière à un enseignant",
 												"Désigner un professeur principal");
@@ -43,7 +46,6 @@ $menu['cell']['parametre']['lien'] = array("allpwd",
 											"addmatcls",
 											"addmatclss",
 											"updMatiereClasse",
-											"rmMatiereClasse",
 											"createDate",
 											"addprofcls",
 											"addPP");
@@ -79,32 +81,67 @@ $menu['cell']['enseignant']['lien'] = array('addProf',
 										'findProf',
 										"listProf");
 
-$menu['cell']['finance']['libelle'] = array("créer une rubrique",
+/*$menu['cell']['finance']['libelle'] = array("créer une rubrique",
 											"liste des rubriques",
 											"Ajouter une rubrique à la classe",
 											"retirer une rubrique de la classe",
-											"rubriques de la classe");
-$menu['cell']['finance']['lien'] = array("addrub",
+											"rubriques de la classe");*/
+/*$menu['cell']['finance']['lien'] = array("addrub",
 										"viewrub",
 										"insertrub",
 										"rmrub",
-										"listrub");
+										"listrub");*/
+
+$menu['cell']['note']['libelle'] = array('ajouter une note',
+											'modifier une note',
+											'supprimer une note',
+											'reconduire les notes',
+											"consulter les notes ",
+											"revendication");
+$menu['cell']['note']['lien'] = array('addnt',
+										'updnt',
+										'delnt',
+										'copynt',
+										'viewnt',
+										'revendic');
 
 $menu['cell']['traitement']['libelle'] = array('vue globale des notes',
-													'traiter les notes séquentielles', 
-													'traiter les moyennes séquentielles',
+													/*'traiter les notes séquentielles', */
+													/*'traiter les moyennes séquentielles',*/
 													'traiter les notes trimestrielles',
 													"traiter les moyennes trimestrielles",
 													"traiter les notes annuelles",
 													"traiter les moyennes annuelles"
 													);
 $menu['cell']['traitement']['lien'] = array('vueNote',
-											'traitNtSeq',
-											'traitMoySeq',
+											/*'traitNtSeq',
+											'traitMoySeq',*/
 											'traitNtTrim',
 											'traitMoyTrim',
 											'traitNtAnn',
 											'traitMoyAnn');
+
+$menu['cell']['bulletins']['libelle'] = array('bulletins séquentiels',
+											'bulletins trimestriels',
+											'bulletins annuels',
+											"tableau d'honneur séquentiel",
+											"tableau d'honneur trimestriel",
+											"tableau d'honneur annuel",
+											"recapitulatif trimestriel",
+											"PV des notes par matière",
+											"Relevé de Notes Annuelles" );
+$menu['cell']['bulletins']['lien'] = array('bullSeq',
+											'bullTrim',
+											'bullAnn',
+											'tabHonSeq',
+											'tabHonTrim',
+											'tabHonAnn',
+											'recapTrim',
+											"recapMatiere",
+											"relNoteAnnuelle");
+
+$menu['cell']['cloture']['libelle'] = array('conseil de classe', "cloturer l'année");
+$menu['cell']['cloture']['lien'] = array('conseil', 'close');
 
 
 
@@ -140,12 +177,6 @@ $menu['admin']['journal']['lien'] = array('note','finance', 'eleve');
 $menu['admin']['bd']['libelle'] = array('Année Scolaire', 'Appréciation', 'classe',
 												'periode', 'type utilisateur');
 $menu['admin']['bd']['lien'] = array('as','appr','cls','per','usert');
-
-$menu['admin']['archives']['libelle'] = array();
-$menu['admin']['archives']['lien'] = array();
-
-$menu['admin']['parametres']['libelle'] = array("Cloturer l'année", "Sauvegarder les données");
-$menu['admin']['parametres']['lien'] = array('close', 'save');
 /*$menu['admin']['bd']['libelle'] = array('Année Scolaire', 'Appréciation', 'classe',
 												'periode', 'type utilisateur');
 $menu['admin']['bd']['lien'] = array('as','appr','cls','per','usert');*/

@@ -2,6 +2,7 @@
 	session_start();
 	require_once('../inc/connect.inc.php');
 	$config = new config($db);
+	$config->updateApp();
 	
 	if(isset($_SESSION['message'])){
 		echo "<script>alert('".$_SESSION['message']."');</script>";

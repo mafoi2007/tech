@@ -46,7 +46,7 @@
 			<td colspan='5' align='center'>
 				<input 
 					type="submit" 
-					name="ajout_photo_eleve" 
+					name="addPhotoEleve" 
 					value="Ajouter Photo" />
 			</td>
 		</tr>

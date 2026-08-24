@@ -27,12 +27,12 @@
 </h4>
 <h4>L'établissement est un : 
 	<select name='natureEts'>
-		<option value='cetic'>Un CETIC</option>
-		<option value='cetic_bil'>Un CETIC BILINGUE</option>
-		<option value='lyceetech'>un Lycée Technique</option>
-		<option value='lyceetech_bil'>Un Lycée Technique Bilingue</option>
-		<option value='coltech'>Un Collège Technique Francophone</option>
-		<option value='coltech_bil' selected>Un Collège Technique Bilingue</option>
+		<option value='ces'>Un CES</option>
+		<option value='ces_bil'>Un CES BILINGUE</option>
+		<option value='lycee'>un Lycée</option>
+		<option value='lycee_bil'>Un Lycée Bilingue</option>
+		<option value='col'>Un Collège Privé Francophone</option>
+		<option value='col_bil' selected>Un Collège Privé Bilingue</option>
 	</select>
 </h4>
 

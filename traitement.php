@@ -150,7 +150,8 @@
 		// On ajoute une classe 
 		if(isset($_POST['ajout_matiere'])){
 			// echo '<pre>'; print_r($_POST); echo '</pre>';
-			$matiere = $_POST;
+			$matiere['code_matiere'] = $_POST['code_matiere'];
+			$matiere['nom_matiere'] = $_POST['nom_matiere'];
 			$config->ajouterMatiere($source, $matiere);
 		}
 
@@ -651,16 +652,34 @@
 		
 		
 		
-		/*
+		
 		//On ajoute la photo des élèves 
-		if(isset($_POST['ajout_photo_eleve'])){
-			// echo '<h1>Les Eleves</h1>';
+		if(isset($_POST['addPhotoEleve'])){
+			echo '<h1>Les Eleves</h1>';
 			// echo '<pre>'; print_r($_POST); echo '</pre>';
-			// echo '<h1>Les Photos</h1>';
+			echo '<h1>Les Photos</h1>';
 			// echo '<pre>'; print_r($_FILES); echo '</pre>';
-			$config->enregistrerImageEleve($source, $_POST['eleve'], 'images/student/',$_FILES['photo']);
+			$config->enregistrerImageEleve($source, $_POST['eleve'], 'images/student/',$_FILES['photoEleve']);
 		}
-		*/
+
+
+
+
+
+
+
+
+		/**
+		 * On veut valider le conseil de classe
+		 */
+		if(isset($_POST['validerConseil'])){
+			// echo '<pre>'; print_r($_POST); echo '</pre>';
+			$info['classe'] = $_POST['classe'];
+			$info['eleve'] = $_POST['eleve'];
+			$info['decision'] = $_POST['decision'];
+			$config->validerConseilClasse($source, $info);
+		}
+		
 		
 		
 		
@@ -692,7 +711,7 @@
 					$eleve = $config->getEleve($_POST['eleve']);
 					$section = $config->getSectionclasse($eleve['classe']);
 					$_SESSION['eleve'] = $eleve;
-					$_SESSION['classe']['section'] = $section;
+					$_SESSION['class']['section'] = $section;
 					$_SESSION['print'] = 'certificatScolarite';
 					header('Location:print_pdf.php');
 				}
@@ -713,6 +732,7 @@
 						header('Location:'.$source);
 					}else{
 						$section = $config->getSectionClasse($classe);
+						echo var_dump($_SESSION['information']);
 						$_SESSION['classe']['information'] = $_SESSION['information'];
 						$_SESSION['classe']['eleve'] = $listeEleve;
 						$_SESSION['classe']['section'] = $section;
@@ -722,6 +742,35 @@
 					}
 				}
 			}
+
+
+
+
+			// On imprime la liste des élèves avec photos
+			if($print==='listeElevePhoto'){
+				$classe = $_POST['classe'];
+				if($classe=='null'){
+					$_SESSION['message'] = 'Vous devez choisir une classe.';
+					header('Location:'.$source);
+				}else{
+					$listeEleve = $config->listeEleve($_POST['classe'], 'non_supprime', $as );
+					$nbValue = count($listeEleve); // Si ça vaut 0, y'a pas d'élèves dans la classe.
+					if($nbValue===0){
+						$_SESSION['message'] = 'Classe sans élèves.';
+						header('Location:'.$source);
+					}else{
+						$section = $config->getSectionClasse($classe);
+						$_SESSION['classe']['information'] = $_SESSION['information'];
+						$_SESSION['classe']['eleve'] = $listeEleve;
+						$_SESSION['classe']['section'] = $section;
+						$_SESSION['classe']['stat'] = $config->listeEleveStat($_POST['classe'], 'non_supprime', $as);
+						$_SESSION['print'] = 'listeElevePhoto';
+						header('Location:print_pdf.php');
+					}
+				}
+			}
+
+
 			
 			
 			// La Vue d'ensemble des effectifs 
@@ -860,63 +909,88 @@
 			
 			
 			elseif($_POST['to_print']=='BulletinSequentiel'){
-			$_SESSION['print'] ='BullSeq';
-			// echo $_SESSION['print'];
-			$_SESSION['sequence'] = $_POST['sekence'];
-			$_SESSION['classe'] = $_POST['classe'];
-			$_SESSION['nomClasse'] = $config->viewNomClasse($_POST['classe']);
-			$section = $config->verifSectionClasse($_POST['classe']);
-			$_SESSION['section'] = $section;
-			$eleve = $config->moySequenceClasse($_POST['sekence'], 
-												$_POST['classe']);
-			$eleve2 = $config->moySequenceClasseMerite($_POST['sekence'], 
-												$_POST['classe']);
-			$tableBulletin = $config->sequenceClasse($_POST['sekence'],
-												$_POST['classe']);
-			$tableStat = $config->statSequence($_POST['sekence'], 
-												$_POST['classe']);
-			$nbGroupe = $config->afficheGroupe($_POST['classe']);
-			for($w=0;$w<count($nbGroupe);$w++){
-				$nomGpe = $nbGroupe[$w]['groupe'];
-				$matiereGroupe[$nomGpe] = $config->getmatiereGroupe($nbGroupe[$w]['groupe'],
-														$_POST['classe']);
-			}
-			$groupes = $config->getGroupeClasse($_POST['classe']);
-			for($x=0;$x<count($groupes);$x++){
-				$gpCode = $groupes[$x]['code_groupe'];
-				$listeMatiere = $config->getMatiereGroupe($gpCode,
-														$_SESSION['classe']);
-				$j=0;
-				while($j<count($listeMatiere)){
-					$codeMatiere[$gpCode][] = $listeMatiere[$j]['id_matiere'];
-					$nomMatiere[$gpCode][] = $listeMatiere[$j]['nom_matiere'];
-					$j++;
+				$eleve = $config->configBulletinSequence($_POST['classe'], $_POST['trimestre']);
+				if($eleve==NULL){
+					$_SESSION['message'] = 'Aucun bulletin disponible pour la séquence dans la classe.';
+					header('Location:'.$source);
+				}else{
+					$_SESSION['eleve'] = $eleve;
+					$_SESSION['print'] ='BulletinSequentiel';
+					$_SESSION['sequence'] = $_POST['trimestre'];
+					$_SESSION['classe'] = $_POST['classe'];
+					$section = $config->verifSectionClasse($_POST['classe']);
+					$_SESSION['section'] = $section;
+					// echo "<pre>"; print_r($eleve); echo "</pre>";
+					header('Location:print_pdf.php');
 				}
-			}
-			$_SESSION['code_matiere'] = $codeMatiere;
-			$_SESSION['nom_matiere'] = $nomMatiere;
-			
-			$_SESSION['eleve'] = $eleve;
-			$_SESSION['eleve2'] = $eleve2;
-			$_SESSION['bulletin'] = $tableBulletin;
-			$_SESSION['statistique'] = $tableStat;
-			$_SESSION['matiereGroupe'] = $matiereGroupe;
-			$nom_classe = $config->getClasse($_POST['classe']);
-			$_SESSION['nom_classe'] = $nom_classe['nom_classe'];
-			$_SESSION['groupe'] = $config->getGroupeClasse($_POST['classe']);
-			
-				// On extrait le Prof Principal de la Classe
-				$classePrincipale = $config->classePrincipale();
-				// echo '<pre>';print_r($classePrincipale); echo '</pre>';
-				for($a=0;$a<count($classePrincipale);$a++){
-					if($classePrincipale[$a]['code_classe']==$_SESSION['classe']){
-						$_SESSION['professeurPrincipal'] = $classePrincipale[$a]['sexe'].' ';
-						$_SESSION['professeurPrincipal'] .= strtoupper($classePrincipale[$a]['nom']).' ';
-						$_SESSION['professeurPrincipal'] .= ucwords($classePrincipale[$a]['prenom']).' ';
+
+
+
+
+
+
+
+				
+				// echo $_SESSION['print'];
+				
+				
+				
+				
+				
+
+				
+				
+				
+				/*$eleve = $config->moySequenceClasse($_POST['trimestre'], 
+													$_POST['classe']);
+				$eleve2 = $config->moySequenceClasseMerite($_POST['sekence'], 
+													$_POST['classe']);
+				$tableBulletin = $config->sequenceClasse($_POST['sekence'],
+													$_POST['classe']);
+				$tableStat = $config->statSequence($_POST['sekence'], 
+													$_POST['classe']);
+				$nbGroupe = $config->afficheGroupe($_POST['classe']);*/
+				/*for($w=0;$w<count($nbGroupe);$w++){
+					$nomGpe = $nbGroupe[$w]['groupe'];
+					$matiereGroupe[$nomGpe] = $config->getmatiereGroupe($nbGroupe[$w]['groupe'],
+															$_POST['classe']);
+				}*/
+				/*$groupes = $config->getGroupeClasse($_POST['classe']);*/
+				/*for($x=0;$x<count($groupes);$x++){
+					$gpCode = $groupes[$x]['code_groupe'];
+					$listeMatiere = $config->getMatiereGroupe($gpCode,
+															$_SESSION['classe']);
+					$j=0;
+					while($j<count($listeMatiere)){
+						$codeMatiere[$gpCode][] = $listeMatiere[$j]['id_matiere'];
+						$nomMatiere[$gpCode][] = $listeMatiere[$j]['nom_matiere'];
+						$j++;
 					}
-				}
-			header('Location:print_pdf.php');
-		}
+				}*/
+				/*$_SESSION['code_matiere'] = $codeMatiere;
+				$_SESSION['nom_matiere'] = $nomMatiere;*/
+				
+				/*$_SESSION['eleve'] = $eleve;
+				$_SESSION['eleve2'] = $eleve2;
+				$_SESSION['bulletin'] = $tableBulletin;
+				$_SESSION['statistique'] = $tableStat;
+				$_SESSION['matiereGroupe'] = $matiereGroupe;
+				$nom_classe = $config->getClasse($_POST['classe']);
+				$_SESSION['nom_classe'] = $nom_classe['nom_classe'];
+				$_SESSION['groupe'] = $config->getGroupeClasse($_POST['classe']);*/
+				
+					// On extrait le Prof Principal de la Classe
+					/*$classePrincipale = $config->classePrincipale();*/
+					// echo '<pre>';print_r($classePrincipale); echo '</pre>';
+					/*for($a=0;$a<count($classePrincipale);$a++){
+						if($classePrincipale[$a]['code_classe']==$_SESSION['classe']){
+							$_SESSION['professeurPrincipal'] = $classePrincipale[$a]['sexe'].' ';
+							$_SESSION['professeurPrincipal'] .= strtoupper($classePrincipale[$a]['nom']).' ';
+							$_SESSION['professeurPrincipal'] .= ucwords($classePrincipale[$a]['prenom']).' ';
+						}
+					}*/
+				// header('Location:print_pdf.php');
+			}
 
 
 
@@ -1030,6 +1104,175 @@
 
 
 
+
+		elseif($_POST['to_print']=='BulletinAnnuel'){
+			// echo '<pre>';print_r($_POST);echo '</pre>';
+
+			$section = $config->verifSectionClasse($_POST['classe']);
+			$eleve = $config->moyAnnuelleClasse($_POST['classe']);
+			$eleve2 = $config->moyAnnuelleClasseMerite($_POST['classe']);
+			$tableStat = $config->statAnnuelle($_POST['classe']);
+			$nbGroupe = $config->afficheGroupe($_POST['classe']);
+			$groupes = $config->getGroupeClasse($_POST['classe']);
+			echo '<pre>'; print_r($groupes); echo '</pre>';
+			for($x=0;$x<count($groupes);$x++){
+				$gpId = $groupes[$x]['groupe'];
+				$gpCode = $groupes[$x]['code_groupe'];
+				$listeMatiere = $config->getMatiereGroupe($gpId, $_POST['classe']);
+				
+				$j =0;
+				while($j<count($listeMatiere)){
+					$codeMatiere[$gpCode][] = $listeMatiere[$j]['id_matiere'];
+					$nomMatiere[$gpCode][] = $listeMatiere[$j]['nom_matiere'];
+					$j++;
+				}
+
+			}
+
+			for($w=0;$w<count($nbGroupe);$w++){
+				$nomGpe = $nbGroupe[$w]['groupe'];
+				$matiereGroupe[$nomGpe] = $config->getmatiereGroupe($nbGroupe[$w]['groupe'], $_POST['classe']);
+			}
+			
+
+
+
+			$_SESSION['print'] ='BulletinAnnuel';
+			$_SESSION['info']['classe'] = $_POST['classe'];
+			$_SESSION['info']['nomClasse'] = $config->getClasse($_POST['classe']);
+			$_SESSION['info']['section'] = $section;
+			$_SESSION['info']['eleve'] = $eleve;
+			$_SESSION['info']['eleve2'] = $eleve2;
+			$_SESSION['info']['statistique'] = $tableStat;
+			$_SESSION['info']['groupe'] = $config->getGroupeClasse($_POST['classe']);
+			$_SESSION['info']['code_matiere'] = $codeMatiere;
+			$_SESSION['info']['nom_matiere'] = $nomMatiere;
+			$_SESSION['info']['matiereGroupe'] = $matiereGroupe; // Les matières qui appartiennent à un groupe
+
+			// echo '<pre>'; print_r($_SESSION['info']['matiereGroupe']); echo '</pre>';
+			header('Location:print_pdf.php');
+		}
+
+
+
+
+
+
+
+
+
+		elseif($_POST['to_print']=='TableauHonneurTrimestriel'){
+			echo '<pre>';print_r($_POST);echo '</pre>';
+			$_SESSION['print'] ='TableauHonneurTrimestriel';
+			// echo $_SESSION['print'];
+			$_SESSION['trimestre'] = $_POST['trimestre'];
+			$_SESSION['classe'] = $_POST['classe'];
+			$_SESSION['nomClasse'] = $config->viewNomClasse($_POST['classe']);
+			$section = $config->verifSectionClasse($_POST['classe']);
+			$_SESSION['section'] = $section;
+			$eleve = $config->infoTableauHonneur($_POST['trimestre'], 
+												$_POST['classe']);
+			$eleve2 = $config->moyTrimestreClasseMerite($_POST['trimestre'], 
+												$_POST['classe']);
+			$tableBulletin = $config->trimestreClasse($_POST['trimestre'],
+												$_POST['classe']);
+			$tableStat = $config->statTrimestre($_POST['trimestre'], 
+												$_POST['classe']);
+			$nbGroupe = $config->afficheGroupe($_POST['classe']);
+			for($w=0;$w<count($nbGroupe);$w++){
+				$nomGpe = $nbGroupe[$w]['groupe'];
+				$matiereGroupe[$nomGpe] = $config->getmatiereGroupe($nbGroupe[$w]['groupe'],
+														$_POST['classe']);
+			}
+			$groupes = $config->getGroupeClasse($_POST['classe']);
+			for($x=0;$x<count($groupes);$x++){
+				$gpCode = $groupes[$x]['code_groupe'];
+				$listeMatiere = $config->getMatiereGroupe($gpCode,
+														$_SESSION['classe']);
+				$j=0;
+				while($j<count($listeMatiere)){
+					$codeMatiere[$gpCode][] = $listeMatiere[$j]['id_matiere'];
+					$nomMatiere[$gpCode][] = $listeMatiere[$j]['nom_matiere'];
+					$j++;
+				}
+			}
+			$_SESSION['code_matiere'] = $codeMatiere;
+			$_SESSION['nom_matiere'] = $nomMatiere;
+			
+			$_SESSION['eleve'] = $eleve;
+			$_SESSION['eleve2'] = $eleve2;
+			$_SESSION['bulletin'] = $tableBulletin;
+			$_SESSION['statistique'] = $tableStat;
+			$_SESSION['matiereGroupe'] = $matiereGroupe;
+			$nom_classe = $config->getClasse($_POST['classe']);
+			$_SESSION['nom_classe'] = $nom_classe['nom_classe'];
+			$_SESSION['groupe'] = $config->getGroupeClasse($_POST['classe']);
+
+			header('Location:print_pdf_landscape.php');
+		}
+
+
+
+
+
+
+
+
+		elseif($_POST['to_print']=='TableauHonneurAnnuel'){
+			echo '<pre>';print_r($_POST);echo '</pre>';
+			$_SESSION['print'] ='TableauHonneurAnnuel';
+			// echo $_SESSION['print'];
+			$_SESSION['classe'] = $_POST['classe'];
+			$_SESSION['nomClasse'] = $config->viewNomClasse($_POST['classe']);
+			$section = $config->verifSectionClasse($_POST['classe']);
+			$_SESSION['section'] = $section;
+			$eleve = $config->infoTableauHonneurAnnuel($_POST['classe']);
+			/*$eleve2 = $config->moyTrimestreClasseMerite($_POST['trimestre'], 
+												$_POST['classe']);*/
+			/*$tableBulletin = $config->trimestreClasse($_POST['trimestre'],
+												$_POST['classe']);*/
+			/*$tableStat = $config->statTrimestre($_POST['trimestre'], 
+												$_POST['classe']);*/
+			$nbGroupe = $config->afficheGroupe($_POST['classe']);
+			for($w=0;$w<count($nbGroupe);$w++){
+				$nomGpe = $nbGroupe[$w]['groupe'];
+				$matiereGroupe[$nomGpe] = $config->getmatiereGroupe($nbGroupe[$w]['groupe'],
+														$_POST['classe']);
+			}
+			$groupes = $config->getGroupeClasse($_POST['classe']);
+			for($x=0;$x<count($groupes);$x++){
+				$gpCode = $groupes[$x]['code_groupe'];
+				$listeMatiere = $config->getMatiereGroupe($gpCode,
+														$_SESSION['classe']);
+				$j=0;
+				while($j<count($listeMatiere)){
+					$codeMatiere[$gpCode][] = $listeMatiere[$j]['id_matiere'];
+					$nomMatiere[$gpCode][] = $listeMatiere[$j]['nom_matiere'];
+					$j++;
+				}
+			}
+			$_SESSION['code_matiere'] = $codeMatiere;
+			$_SESSION['nom_matiere'] = $nomMatiere;
+			
+			$_SESSION['eleve'] = $eleve;
+			/*$_SESSION['eleve2'] = $eleve2;*/
+			$_SESSION['bulletin'] = $tableBulletin;
+			$_SESSION['statistique'] = $tableStat;
+			$_SESSION['matiereGroupe'] = $matiereGroupe;
+			$nom_classe = $config->getClasse($_POST['classe']);
+			$_SESSION['nom_classe'] = $nom_classe['nom_classe'];
+			$_SESSION['groupe'] = $config->getGroupeClasse($_POST['classe']);
+
+			header('Location:print_pdf_landscape.php');
+		}
+
+
+
+
+
+
+
+
 		elseif($_POST['to_print']=='RapportTrimestriel'){
 			// echo "<pre>"; print_r($_POST); echo "</pre>";
 			$infoClasse = $config->getClasse($_POST['classe']);
@@ -1043,6 +1286,36 @@
 			$_SESSION['classe']['classe'] = $infoClasse;
 			$_SESSION['print'] = $_POST['to_print'];
 			header('Location:print_pdf_landscape.php');
+		}
+
+
+
+
+
+
+
+		/**
+		 * On génère les statistiques trimestrielles de toutes les classes traitées
+		 *  pour le trimestre sélectionné
+		 */
+		elseif($_POST['to_print']=='StatTrimestriel'){
+			$listeClasse = $config->classesTraiteesTrim($_POST['trimestre']);
+			// echo "<pre>"; print_r($listeClasse); echo "</pre>";
+			for($x=0;$x<count($listeClasse);$x++){
+				$idClasse = $listeClasse[$x]['classe'];
+				$infoClasse = $config->getClasse($idClasse);
+				$listeMatiere = $config->listeMatiereClasse($idClasse);
+				$contenu = $config->moyTrimestreClasse($_POST['trimestre'], $idClasse);
+				$tableStat = $config->statTrimestre($_POST['trimestre'], $idClasse);
+				$_SESSION['classe']['periode'] = $_POST['trimestre'];
+				$_SESSION['classe']['stat'][$x] = $tableStat;
+				$_SESSION['classe']['eleve'][$x] = $contenu;
+				$_SESSION['classe']['matiere'][$x] = $listeMatiere;
+				$_SESSION['classe']['classe'][$x] = $infoClasse;
+				$_SESSION['print'] = $_POST['to_print'];
+				header('Location:print_pdf_landscape.php');
+			}
+			// echo '<pre>'; print_r($_SESSION['classe']); echo '</pre>';
 		}
 
 
@@ -1227,7 +1500,7 @@
 
 		// On veut enregistrer ses notes 
 		if(isset($_POST['saveNote'])){
-			echo '<pre>'; print_r($_POST); echo '</pre>';
+			// echo '<pre>'; print_r($_POST); echo '</pre>';
 			$notes = $_POST;
 			// Avant d'enregistrer, on s'assure que depuis un autre onglet, la tâche n'avait pas déjà été validée.
 			$verification = $config->verifNoteSaisie($_POST['classe'],
@@ -1274,6 +1547,49 @@
 				$classe = $_POST['classe'];
 				$config->deleteNote($source, $periode, $matiere, $classe);
 			}
+		}
+
+
+
+
+
+
+
+
+
+		// On veut reconduire ses notes 
+		if(isset($_POST['copyNote'])){
+			$reponse = $_POST['copyNote'];
+			// echo '<pre>'; print_r($_POST); echo '</pre>';
+			if($reponse==='Annuler'){
+				$_SESSION['message'] = 'Les notes de cette matière ne seront pas copiées.';
+				header('Location:'.$source);
+			}elseif($reponse=='Confirmer'){
+				$info['depart'] = $_POST['sequenceDepart'];
+				$info['arrivee'] = $_POST['sequenceArrivee'];
+				$info['matiere'] = $_POST['matiere'];
+				$info['classe'] = $_POST['classe'];
+				$config->copyNote($source, $info);
+			}
+		}
+
+
+
+
+
+
+
+
+
+		if(isset($_POST['revendic'])){
+			// echo '<pre>'; print_r($_POST); echo '</pre>';
+			$info['eleve'] = $_POST['eleve'];
+			$info['classe'] = $_POST['classe'];
+			$info['periode'] = $_POST['periode'];
+			$info['matiere'] = $_POST['matiere'];
+			$info['note'] = $_POST['note'];
+			$info['reset'] = $_POST['reset'];
+			$config->updateNoteEleve($source, $info);
 		}
 		
 		
@@ -1370,17 +1686,17 @@
 
 
 		if(isset($_REQUEST['TraiterNoteTrimestrielle'])){
-		/*echo '<pre>';
-		print_r($_REQUEST);	*/
-		$trimestre = $_POST['trimestre'];
-		$classe = $_POST['classe'];
-		if($classe=='null' or $trimestre=='null'){
-			$_SESSION['message'] = 'La Classe et/ou le Trimestre doivent être renseignés.';
-			header('Location:'.$source);
-		}else{
-			$config->traiterNoteTrimestre($source, $trimestre, $classe);
+			/*echo '<pre>';
+			print_r($_REQUEST);	*/
+			$trimestre = $_POST['trimestre'];
+			$classe = $_POST['classe'];
+			if($classe=='null' or $trimestre=='null'){
+				$_SESSION['message'] = 'La Classe et/ou le Trimestre doivent être renseignés.';
+				header('Location:'.$source);
+			}else{
+				$config->traiterNoteTrimestre($source, $trimestre, $classe);
+			}
 		}
-	}
 
 
 
@@ -1398,8 +1714,38 @@
 		$config->traiterMoyenneTrimestre($source, $trimestre, $classe);
 		echo '</pre>';
 	}
-	
-	
+
+
+
+
+
+
+
+
+
+	if(isset($_REQUEST['TraiterMoyenneAnnuelle'])){
+		echo '<pre>'; print_r($_REQUEST); echo '</pre>';
+		$config->traiterMoyenneAnnuelle($source, $_POST['classe']);
+	}
+
+
+
+
+
+
+
+
+
+	if(isset($_POST['TraiterNoteAnnuelle'])){
+		echo '<pre>'; print_r($_REQUEST); echo '</pre>';
+		$classe = (int) $_POST['classe'];
+		if($classe==0){
+			$_SESSION['message'] = 'Aucune classe n a été choisie.';
+			header('Location:'.$source);
+		}else{
+			$config->traiterNoteAnnuelle($source, $classe);
+		}
+	}
 		
 		
 		
@@ -1514,4 +1860,78 @@
 		
 		
 		
-		
+	/*****************************************
+	 * **********
+	 * **********
+	 * G	E	N	E	R	A	T	I	O	N	
+	 * 	D	E	S	
+	 * F	I	C	H	I	E	R	S	
+	 * E	X	C	E	L	
+	 * *************************************** */
+	require_once('xlsx_writer/xlsxwriter.class.php');
+	$writer = new XLSXWriter();
+	$writer->setAuthor('Nyambi Computer Services');
+	if(isset($_POST['export'])){
+		// echo '<pre>'; print_r($_POST); echo '</pre>';
+		$export = $_POST['to_export'];
+		if($export=='releveNote'){
+			$classe  = (int) $_POST['classe'];
+			// echo var_dump($classe);
+			if($classe==0){
+				$_SESSION['message'] = 'Bien vouloir choisir une classe.';
+				header('Location:'.$source);
+			}else{
+				$eleve = $config->moyAnnuelleClasse($_POST['classe']);
+				$listeMatiere = $config->listeMatiereClasse($classe);
+				$nomClasse = $config->getClasse($classe);
+				// echo '<pre>', print_r($nomClasse); echo '</pre>';
+				$entete = array('matricule', 'nom', 'sexe');
+				for($x=0;$x<count($eleve);$x++){
+					$student[$x]['matricule'] = $eleve[$x]['rne'];
+					$student[$x]['nom'] = $eleve[$x]['nom_eleve'];
+					$student[$x]['sexe'] = $eleve[$x]['sexe'];
+					for($a=0;$a<count($listeMatiere);$a++){
+						$codeMatiere = strtolower($listeMatiere[$a]['code_matiere']);
+						$champ = $codeMatiere.'_ann';
+						$student[$x][$codeMatiere] = $eleve[$x][$champ];
+					}
+					$student[$x]['moy1'] = $eleve[$x]['moyenne_1'];
+					$student[$x]['moy2'] = $eleve[$x]['moyenne_2'];
+					$student[$x]['moy3'] = $eleve[$x]['moyenne_3'];
+					$student[$x]['moyenne'] = $eleve[$x]['moyenne'];
+					$student[$x]['rang'] = $eleve[$x]['rang'];
+				}
+				for($j=0;$j<count($listeMatiere);$j++){
+					$entete[] = strtolower($listeMatiere[$j]['code_matiere']);
+				}
+				$entete[] = 'trim 1';
+				$entete[] = 'trim 2';
+				$entete[] = 'trim 3';
+				$entete[] = 'Annuel';
+				$entete[] = 'Rang';
+				// echo '<pre>'; print_r($student); echo '</pre>';
+				// echo '<pre>'; print_r($entete); echo '</pre>';
+				$fileName = 'downloads/'.$export.'_'.str_replace(' ', '_',$nomClasse['nom_classe']).'.xlsx';
+				$bordures = array(
+								'border' => 'left,right,top,bottom',
+								'border-style' => 'thin',
+								'border-color' => '#000000',
+								'align' => 'center',
+								'valign' => 'center'
+				);
+				// Entête 
+				// $writer->writeSheetHeader($nomClasse['nom_classe'], $entete);
+				$rows[] = $entete;
+				for($b=0;$b<count($student);$b++){
+					$rows[] = $student[$b];
+				}
+				foreach($rows as $row){
+					$writer->writeSheetRow($nomClasse['nom_classe'], $row, $bordures);
+				}
+				$writer->writeToFile($fileName);
+				$_SESSION['message'] = "Fichier Crée. Téléchargez le à présent.";
+				header('Location:downloads/index.php');
+			}
+		}
+	}
+	

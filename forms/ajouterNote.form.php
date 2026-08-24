@@ -1,8 +1,7 @@
 <?php 
 	$verification = $config->verifNoteSaisie($classe, $matiere, $sequence);
 	if($verification==false){ ?>
-
-<form method='post' action='../traitement.php' target='_blank'>
+<form method='post' action='../traitement.php'>
 	<input 
 		type='hidden'
 		name='classe'
@@ -25,15 +24,13 @@
 	<table border='1' width='75%' align='center'>
 		<tr>
 			<th colspan='5'>
-				Compétence évaluée : 
-				<input 
-					type='text' 
-					name = 'competence'
-					id='competence'
-					size='50'
-					maxlength='35'
-					required
-					placeholder='Saisir la compétence ici' />
+				<b> Compétence Evaluée : 
+					<input 
+						type = 'text' 
+						placeholder = 'Enoncé de la compétence'
+						name='competence' 
+						size='45'
+						required /></b>
 			</th>
 		</tr>
 		<?php 
@@ -51,7 +48,8 @@
 				<td>
 					<input 
 						type='number'
-						name='note[]' 
+						name='note[]'
+						class='note-input'
 						step='0.01' 
 						max='20' 
 						min='0'/>
@@ -66,14 +64,33 @@
 		</tr>
 	</table>
 </form>
+
+<script>
+	(function(){
+		var noteInputs = document.querySelectorAll("input.note-input");
+		for(var i = 0; i < noteInputs.length; i++){
+			noteInputs[i].addEventListener("keydown", function(event){
+				if(event.key === "Enter"){
+					event.preventDefault();
+					var index = Array.prototype.indexOf.call(noteInputs, event.target);
+					if(index > -1 && index < noteInputs.length - 1){
+						noteInputs[index + 1].focus();
+						noteInputs[index + 1].select();
+					}
+				}
+			});
+		}
+	})();
+</script>
 	
 <?php 	
 	}else{
-		echo "<h3 class='alert'>Les Notes de cette matière ont été saisies le ";
-		echo $verification['date_fr']." à ".$verification['heure_fr'];
-		echo ". Reportez-vous au menu <i><u>Modifier des Notes</u></i> ";
-		echo "pour des éventuels changements de notes.</h3>";
+		$msg = "<h3 class='alert'>Les Notes de: <b class='bien'>".$nomMatiere['nom_matiere'];
+		$msg .= "</b> de la classe <b class='bien'>".$nomClasse['nom_classe']."</b> pour la ";
+		$msg .=" séquence <b class='bien'>".$nomSequence['nom_periode']."</b> ont déjà été saisies le ";
+		$msg .= $verification['date_fr']." à ".$verification['heure_fr'];
+		$msg .= ". Reportez-vous au menu <i><u>Modifier des Notes</u></i> ";
+		$msg .= "pour des éventuels changements de notes.</h3>";
+		echo $msg;
 	}
 ?>
-
-
